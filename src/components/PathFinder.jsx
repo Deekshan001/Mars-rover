@@ -52,44 +52,52 @@ function PathFinder() {
     return sources;
   }
 
-  function main() {
+  function  visualizeDijkstra() {
     var start = retSources();
     var ends = retEnds();
     var temp = Dijikstra(grid, start, ends);
     var path = temp.crawlBack;
     path.reverse();
     var visited = temp.nodesVisted;
-    for (let j = 0; j <= visited.length; j++) {
-      if (j === visited.length) {
-        if (path[0] != null) {
-          setTimeout(() => {
-            for (let i = 0; i < path.length; i++) {
-              setTimeout(() => {
-                var newCells = grid.slice();
-                var cell = path[i];
-                if (path[i] != null) {
-                  newCells[cell.row][cell.col] = {
-                    ...path[i],
-                    pathChange: true,
-                    visChange: false,
-                  };
-                  makegrid(newCells);
-                } else {
-                  handleShow();
-                }
-              }, 10 * i);
-            }
-          }, 10 * j);
-        } else setTimeout(() => handleShow(), 15 * j);
-      } else {
+    animateDijkstra(visited,path);
+  }
+
+  function animateDijkstra(visited, path) {
+    for (let i = 0; i <= visited.length; i++) {
+      if (i === visited.length) {
         setTimeout(() => {
-          var newCells = grid.slice();
-          var cell = visited[j];
-          newCells[cell.row][cell.col] = { ...visited[j], visChange: true };
-          makegrid(newCells);
-        }, 10 * j);
+          if (path[0]==null){
+            handleShow();
+            return;
+          }
+          animatePath(path);
+        }, 5 * i);
+        return;
       }
+      setTimeout(() => {
+        const node = visited[i];
+        document.getElementById(`cell-${node.row}-${node.col}`).className =
+          'cell intermediate-cell';
+      }, 5 * i);
     }
+  }
+
+  function animatePath(path) {
+    for (let i = 0; i < path.length; i++) {
+      setTimeout(() => {
+        const node = path[i];
+        if (path[i]==null){
+          handleShow();
+          return;
+        }
+        document.getElementById(`cell-${node.row}-${node.col}`).className =
+          'cell path-cell';
+      }, 50 * i);
+    }
+  }
+
+  function main() {
+    visualizeDijkstra();
   }
   function addWalls() {
     isEndPressed(false);

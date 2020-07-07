@@ -26,6 +26,7 @@ function f1(props) {
 
   return (
     <div
+      id={`cell-${cell.row}-${cell.col}`}
       className={`cell ${moreClasses}`}
       onMouseDown={() => onMouseDown(cell)}
       onMouseEnter={() => onMouseEnter(cell)}
