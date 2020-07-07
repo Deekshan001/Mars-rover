@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Node from "./Node.jsx";
 import Dijikstra from "./dijikstra.jsx";
 import { Button, Modal, ButtonGroup, ToggleButton } from "react-bootstrap";
-
+var source=false;
 function PathFinder() {
   var cells = [];
   const [mousePressed, isMousePressed] = useState(false);
@@ -15,7 +15,7 @@ function PathFinder() {
   for (let i = 0; i < 22; i++) {
     var rows = [];
     for (let j = 0; j < 30; j++) {
-      const cur = {
+        var cur = {
         row: i,
         col: j,
         isStart: i === 10 && j === 5,
@@ -116,15 +116,36 @@ function PathFinder() {
     var sources = [[10, 5]];
   }
 
-  function OnMouseUp() {
+  function OnMouseUp(cell) {
+    if (source)
+    {
+      var newCells = grid.slice();
+      newCells[cell.row][cell.col] = { ...cell, isStart: true ,isWall:false};
+
+      makegrid(newCells);
+
+    }
+    source=false;
     isMousePressed(false);
   }
+  function OnMouseLeave(cell) {
+    if(source)
+    {
+      var newCells = grid.slice();
+      newCells[cell.row][cell.col] = { ...cell, isStart: false };
+      makegrid(newCells);
+    }
 
+  }
   function OnMouseDown(cell) {
     var newCells = grid.slice();
     if (endPressed) newCells[cell.row][cell.col] = { ...cell, isFinish: true };
     else if (sourcePressed)
       newCells[cell.row][cell.col] = { ...cell, isStart: true };
+    else if(cell.isStart)
+      {
+        source=true;
+      }
     else newCells[cell.row][cell.col] = { ...cell, isWall: true };
     makegrid(newCells);
     isMousePressed(true);
@@ -135,6 +156,10 @@ function PathFinder() {
       var newCells = grid.slice();
       if (endPressed)
         newCells[cell.row][cell.col] = { ...cell, isFinish: true };
+      else if(source)
+         {
+           newCells[cell.row][cell.col] = { ...cell, isStart: true};
+         }
       else if (sourcePressed)
         newCells[cell.row][cell.col] = { ...cell, isStart: true };
       else
@@ -206,7 +231,8 @@ function PathFinder() {
                 visChange={col.visChange}
                 onMouseDown={(cell) => OnMouseDown(cell)}
                 onMouseEnter={(cell) => OnMouseEnter(cell)}
-                onMouseUp={() => OnMouseUp()}
+                onMouseUp={(cell) => OnMouseUp(cell)}
+                onMouseLeave={(cell) => OnMouseLeave(cell)}
                 isWall={col.isWall}
               />
             ))}

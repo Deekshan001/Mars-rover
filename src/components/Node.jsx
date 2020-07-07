@@ -1,6 +1,6 @@
 import React from "react";
 function f1(props) {
-  const {
+  var {
     isStart,
     isFinish,
     pathChange,
@@ -9,6 +9,7 @@ function f1(props) {
     onMouseDown,
     onMouseEnter,
     onMouseUp,
+    onMouseLeave,
     cell,
   } = props;
 
@@ -26,12 +27,15 @@ function f1(props) {
 
   return (
     <div
-      id={`cell-${cell.row}-${cell.col}`}
+     id={`cell-${cell.row}-${cell.col}`}
       className={`cell ${moreClasses}`}
       onMouseDown={() => onMouseDown(cell)}
       onMouseEnter={() => onMouseEnter(cell)}
-      onMouseUp={() => onMouseUp()}
-    ></div>
+      onMouseUp={() => onMouseUp(cell)}
+      onMouseLeave={() => onMouseLeave(cell)}
+    >
+    </div>
+
   );
 }
 export default f1;
