@@ -25,12 +25,15 @@ function endsvisited(ends, cells) {
 }
 
 function Dijikstra(cells, start, ends) {
-  var cur = start;
-  cur.distance = 0;
-  cur.isVisited = true;
-  cells[cur.row][cur.col] = cur;
+  var cur = null;
   var nodesVisted = [];
-  nodesVisted.push(cur);
+  for (let i = 0; i < start.length; i++) {
+    cur = cells[start[i][0]][start[i][1]];
+    cur.distance = 0;
+    cells[cur.row][cur.col] = cur;
+  }
+  nodesVisted.push(cells[start[0][0]][start[0][1]]);
+
   var dx = [-1, 1, 0, 0];
   var dy = [0, 0, -1, 1];
   while (cur !== null) {
@@ -55,9 +58,9 @@ function Dijikstra(cells, start, ends) {
   for (let i = 0; i < ends.length; i++) {
     cur = cells[ends[i][0]][ends[i][1]];
     crawlBack.push(cur);
-    while (cur !== null && cur !== cells[start.row][start.col]) {
+    while (cur !== null) {
       cur = cur.parent;
-      crawlBack.push(cur);
+      if (cur !== null) crawlBack.push(cur);
     }
   }
   return { nodesVisted, crawlBack };

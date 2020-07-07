@@ -19,9 +19,7 @@ code {
   outline: 1px solid #edffea;
   display: inline-block;
 }
-.column {
-  display: inline;
-}
+
 .container {
   margin: 50px;
   justify-content: center;

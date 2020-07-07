@@ -7,6 +7,7 @@ function PathFinder() {
   var cells = [];
   const [mousePressed, isMousePressed] = useState(false);
   const [endPressed, isEndPressed] = useState(false);
+  const [sourcePressed, isSourcePressed] = useState(false);
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -33,14 +34,6 @@ function PathFinder() {
 
   const [grid, makegrid] = useState(cells);
 
-  function makeEnds(ends) {
-    var newCells = grid.slice();
-    for (let i = 0; i < ends.length; i++) {
-      newCells[ends[i][0]][ends[i][1]].isFinish = true;
-    }
-    makegrid(newCells);
-  }
-
   function retEnds() {
     var ends = [];
     for (let i = 0; i < grid.length; i++)
@@ -50,16 +43,22 @@ function PathFinder() {
     return ends;
   }
 
-  function main() {
-    var start = cells[10][5];
-    var ends = retEnds();
+  function retSources() {
+    var sources = [];
+    for (let i = 0; i < grid.length; i++)
+      for (let j = 0; j < grid[i].length; j++) {
+        if (grid[i][j].isStart === true) sources.push([i, j]);
+      }
+    return sources;
+  }
 
+  function main() {
+    var start = retSources();
+    var ends = retEnds();
     var temp = Dijikstra(grid, start, ends);
     var path = temp.crawlBack;
     path.reverse();
     var visited = temp.nodesVisted;
-    console.log(path);
-
     for (let j = 0; j <= visited.length; j++) {
       if (j === visited.length) {
         if (path[0] != null) {
@@ -94,15 +93,19 @@ function PathFinder() {
   }
   function addWalls() {
     isEndPressed(false);
+    isSourcePressed(false);
   }
+
   function addEnds() {
     isEndPressed(true);
-    var ends = [
-      [10, 24],
-      [15, 20],
-      [5, 15],
-    ];
-    makeEnds(ends);
+    isSourcePressed(false);
+    var ends = [[10, 24]];
+  }
+
+  function addSources() {
+    isSourcePressed(true);
+    isEndPressed(false);
+    var sources = [[10, 5]];
   }
 
   function OnMouseUp() {
@@ -112,6 +115,8 @@ function PathFinder() {
   function OnMouseDown(cell) {
     var newCells = grid.slice();
     if (endPressed) newCells[cell.row][cell.col] = { ...cell, isFinish: true };
+    else if (sourcePressed)
+      newCells[cell.row][cell.col] = { ...cell, isStart: true };
     else newCells[cell.row][cell.col] = { ...cell, isWall: true };
     makegrid(newCells);
     isMousePressed(true);
@@ -122,6 +127,8 @@ function PathFinder() {
       var newCells = grid.slice();
       if (endPressed)
         newCells[cell.row][cell.col] = { ...cell, isFinish: true };
+      else if (sourcePressed)
+        newCells[cell.row][cell.col] = { ...cell, isStart: true };
       else
         newCells[cell.row][cell.col] = {
           ...newCells[cell.row][cell.col],
@@ -136,6 +143,7 @@ function PathFinder() {
   const radios = [
     { name: "Add Walls", value: "1" },
     { name: "Add destinations", value: "2" },
+    { name: "Add Sources", value: "3" },
   ];
 
   return (
@@ -159,7 +167,13 @@ function PathFinder() {
             value={radio.value}
             checked={radioValue === radio.value}
             onChange={(e) => setRadioValue(e.currentTarget.value)}
-            onClick={() => (radio.value == 2 ? addEnds() : addWalls())}
+            onClick={() =>
+              radio.value == 3
+                ? addSources()
+                : radio.value == 2
+                ? addEnds()
+                : addWalls()
+            }
           >
             {radio.name}
           </ToggleButton>
