@@ -105,6 +105,25 @@ function PathFinder() {
     isSourcePressed(false);
   }
 
+  function reset() {
+    window.location.reload(false);
+  }
+
+  function addRandomWalls() {
+    console.log(1);
+    var newCells = grid.slice();
+    var row;
+    var col;
+    var i;
+    for (i = 0; i < 50; i++) {
+      row = Math.floor(Math.random() * (21 - 0));
+      col = Math.floor(Math.random() * (29 - 0));
+      if (!grid[row][col].isStart && !grid[row][col].isFinish) {
+        newCells[row][col] = { isWall: true };
+        makegrid(newCells);
+      }
+    }
+  }
   function addEnds() {
     isEndPressed(true);
     isSourcePressed(false);
@@ -164,14 +183,6 @@ function PathFinder() {
     }
   }
 
-  const [radioValue, setRadioValue] = useState("1");
-
-  const radios = [
-    { name: "Add Walls", value: "1" },
-    { name: "Add destinations", value: "2" },
-    { name: "Add Sources", value: "3" },
-  ];
-
   return (
     <div>
       <Navbar className="nav-bar" variant="light" expand="lg">
@@ -184,6 +195,8 @@ function PathFinder() {
             <Nav.Link onClick={addEnds}>Add destination</Nav.Link>
           </Nav>
           <Nav>
+            <Nav.Link onClick={addRandomWalls}>Add Random Walls</Nav.Link>
+            <Nav.Link onClick={reset}>Reset Grid</Nav.Link>
             <Button onClick={main} variant="outline-success">
               Start Search
             </Button>

@@ -25,6 +25,8 @@ function endsvisited(ends, cells) {
 }
 
 function Dijikstra(cells, start, ends) {
+  var StartTime = new Date();
+  console.log(StartTime);
   var cur = null;
   var nodesVisted = [];
   for (let i = 0; i < start.length; i++) {
@@ -40,12 +42,17 @@ function Dijikstra(cells, start, ends) {
     for (let i = 0; i < 4; i++) {
       var x = cur.row + dx[i];
       var y = cur.col + dy[i];
-      if (isSafe(x, y, cells))
-        if (cells[x][y].distance > cur.distance + 1) {
+      if (isSafe(x, y, cells)) {
+        if (cells[x][y].isFinish) {
+          cells[x][y].distance = 0;
+          cells[x][y].parent = cur;
+        } else if (cells[x][y].distance > cur.distance + 1) {
           cells[x][y].distance = cur.distance + 1;
           cells[x][y].parent = cur;
         }
+      }
     }
+
     cur = getNextNode(cells);
     if (cur !== null) {
       cur.isVisited = true;
@@ -53,7 +60,11 @@ function Dijikstra(cells, start, ends) {
     }
     if (endsvisited(ends, cells)) break;
   }
-
+  var EndTime = new Date();
+  console.log(EndTime);
+  var diff = EndTime - StartTime;
+  diff = diff + "ms";
+  console.log("diff= " + diff);
   var crawlBack = [];
   for (let i = 0; i < ends.length; i++) {
     cur = cells[ends[i][0]][ends[i][1]];
@@ -63,6 +74,8 @@ function Dijikstra(cells, start, ends) {
       if (cur !== null) crawlBack.push(cur);
     }
   }
+  var path = crawlBack.length - 1;
+  console.log(path);
   return { nodesVisted, crawlBack };
 }
 export default Dijikstra;
