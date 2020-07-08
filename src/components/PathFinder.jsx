@@ -115,9 +115,17 @@ function PathFinder() {
     var row;
     var col;
     var i;
+    var j;
+    for(i=0;i<22;i++)
+    {
+      for(j=0;j<30;j++)
+      {
+        grid[i][j].isWall=false
+      }
+    }
     for (i = 0; i < 50; i++) {
-      row = Math.floor(Math.random() * (21 - 0));
-      col = Math.floor(Math.random() * (29 - 0));
+      row = Math.floor(Math.random() * (22 - 0));
+      col = Math.floor(Math.random() * (30 - 0));
       if (!grid[row][col].isStart && !grid[row][col].isFinish) {
         newCells[row][col] = { isWall: true };
         makegrid(newCells);
