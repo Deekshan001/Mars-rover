@@ -74,8 +74,8 @@ function Dijikstra(cells, start, ends) {
       if (cur !== null) crawlBack.push(cur);
     }
   }
-  var path = crawlBack.length - 1;
-  console.log(path);
-  return { nodesVisted, crawlBack };
+  var pathlen = crawlBack.length - 1;
+  
+  return { nodesVisted, crawlBack,pathlen,diff };
 }
 export default Dijikstra;

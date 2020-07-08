@@ -107,7 +107,20 @@ code {
     background-color: rgb(255, 254, 106);
   }
 }
+.list{
+  margin:0;
+  z-index: -1;
+  background:white;
+  border-radius: 6px;
+  padding:8px;
+  position:fixed;
+  top:500px;
+  left:105px;
+  list-style-type: none;
+}
+li{
 
+}
 .nav-bar {
   background-color: #bac964;
 }

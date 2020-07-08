@@ -4,6 +4,9 @@ import Dijikstra from "./dijikstra.jsx";
 import { Button, Modal, ButtonGroup, ToggleButton, Nav } from "react-bootstrap";
 import Navbar from "react-bootstrap/Navbar";
 var source = false;
+var destination=false;
+var time=0;
+var pathLen=0;
 function PathFinder() {
   var cells = [];
   const [mousePressed, isMousePressed] = useState(false);
@@ -58,6 +61,10 @@ function PathFinder() {
     var ends = retEnds();
     var temp = Dijikstra(grid, start, ends);
     var path = temp.crawlBack;
+    time=temp.diff;
+    pathLen=temp.pathlen;
+    setTimeandPathLen();
+  //  setPathlen();
     path.reverse();
     var visited = temp.nodesVisted;
     animateDijkstra(visited, path);
@@ -77,6 +84,7 @@ function PathFinder() {
       }
       setTimeout(() => {
         const node = visited[i];
+        if(!node.isStart && !node.isFinish)
         document.getElementById(`cell-${node.row}-${node.col}`).className =
           "cell intermediate-cell";
       }, 5 * i);
@@ -91,6 +99,7 @@ function PathFinder() {
           handleShow();
           return;
         }
+        if(!node.isStart && !node.isFinish)
         document.getElementById(`cell-${node.row}-${node.col}`).className =
           "cell path-cell";
       }, 50 * i);
@@ -108,7 +117,13 @@ function PathFinder() {
   function reset() {
     window.location.reload(false);
   }
+function setTimeandPathLen()
+{
+  const list=document.querySelector('.list');
+  list.children[0].innerHTML="Time:"+time;
+  list.children[1].innerHTML="PathLen:"+pathLen;
 
+}
   function addRandomWalls() {
     console.log(1);
     var newCells = grid.slice();
@@ -148,16 +163,27 @@ function PathFinder() {
     if (source) {
       var newCells = grid.slice();
       newCells[cell.row][cell.col] = { ...cell, isStart: true, isWall: false };
-
+      source = false;
       makegrid(newCells);
     }
-    source = false;
+    else if (destination) {
+      var newCells = grid.slice();
+      newCells[cell.row][cell.col] = { ...cell, isFinish: true, isWall: false };
+      destination = false;
+      makegrid(newCells);
+    }
+
     isMousePressed(false);
   }
   function OnMouseLeave(cell) {
     if (source) {
       var newCells = grid.slice();
       newCells[cell.row][cell.col] = { ...cell, isStart: false };
+      makegrid(newCells);
+    }
+    else if (destination) {
+      var newCells = grid.slice();
+      newCells[cell.row][cell.col] = { ...cell, isFinish: false };
       makegrid(newCells);
     }
   }
@@ -168,6 +194,9 @@ function PathFinder() {
       newCells[cell.row][cell.col] = { ...cell, isStart: true };
     else if (cell.isStart) {
       source = true;
+    }
+    else if (cell.isFinish) {
+      destination = true;
     } else newCells[cell.row][cell.col] = { ...cell, isWall: true };
     makegrid(newCells);
     isMousePressed(true);
@@ -180,6 +209,9 @@ function PathFinder() {
         newCells[cell.row][cell.col] = { ...cell, isFinish: true };
       else if (source) {
         newCells[cell.row][cell.col] = { ...cell, isStart: true };
+      }
+      else if (destination) {
+        newCells[cell.row][cell.col] = { ...cell, isFinish: true };
       } else if (sourcePressed)
         newCells[cell.row][cell.col] = { ...cell, isStart: true };
       else
@@ -193,6 +225,13 @@ function PathFinder() {
 
   return (
     <div>
+      <ul class="list">
+        <li>Time:0ms</li>
+        <li>PathLen:0</li>
+      </ul>
+
+
+
       <Navbar className="nav-bar" variant="light" expand="lg">
         <Navbar.Brand>Path Finder</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
