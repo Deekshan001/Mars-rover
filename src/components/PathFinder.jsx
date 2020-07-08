@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import Node from "./Node.jsx";
 import Dijikstra from "./dijikstra.jsx";
-import { Button, Modal, ButtonGroup, ToggleButton } from "react-bootstrap";
-var source=false;
+import { Button, Modal, ButtonGroup, ToggleButton, Nav } from "react-bootstrap";
+import Navbar from "react-bootstrap/Navbar";
+var source = false;
 function PathFinder() {
   var cells = [];
   const [mousePressed, isMousePressed] = useState(false);
@@ -15,7 +16,7 @@ function PathFinder() {
   for (let i = 0; i < 22; i++) {
     var rows = [];
     for (let j = 0; j < 30; j++) {
-        var cur = {
+      var cur = {
         row: i,
         col: j,
         isStart: i === 10 && j === 5,
@@ -52,21 +53,21 @@ function PathFinder() {
     return sources;
   }
 
-  function  visualizeDijkstra() {
+  function visualizeDijkstra() {
     var start = retSources();
     var ends = retEnds();
     var temp = Dijikstra(grid, start, ends);
     var path = temp.crawlBack;
     path.reverse();
     var visited = temp.nodesVisted;
-    animateDijkstra(visited,path);
+    animateDijkstra(visited, path);
   }
 
   function animateDijkstra(visited, path) {
     for (let i = 0; i <= visited.length; i++) {
       if (i === visited.length) {
         setTimeout(() => {
-          if (path[0]==null){
+          if (path[0] == null) {
             handleShow();
             return;
           }
@@ -77,7 +78,7 @@ function PathFinder() {
       setTimeout(() => {
         const node = visited[i];
         document.getElementById(`cell-${node.row}-${node.col}`).className =
-          'cell intermediate-cell';
+          "cell intermediate-cell";
       }, 5 * i);
     }
   }
@@ -86,12 +87,12 @@ function PathFinder() {
     for (let i = 0; i < path.length; i++) {
       setTimeout(() => {
         const node = path[i];
-        if (path[i]==null){
+        if (path[i] == null) {
           handleShow();
           return;
         }
         document.getElementById(`cell-${node.row}-${node.col}`).className =
-          'cell path-cell';
+          "cell path-cell";
       }, 50 * i);
     }
   }
@@ -117,36 +118,30 @@ function PathFinder() {
   }
 
   function OnMouseUp(cell) {
-    if (source)
-    {
+    if (source) {
       var newCells = grid.slice();
-      newCells[cell.row][cell.col] = { ...cell, isStart: true ,isWall:false};
+      newCells[cell.row][cell.col] = { ...cell, isStart: true, isWall: false };
 
       makegrid(newCells);
-
     }
-    source=false;
+    source = false;
     isMousePressed(false);
   }
   function OnMouseLeave(cell) {
-    if(source)
-    {
+    if (source) {
       var newCells = grid.slice();
       newCells[cell.row][cell.col] = { ...cell, isStart: false };
       makegrid(newCells);
     }
-
   }
   function OnMouseDown(cell) {
     var newCells = grid.slice();
     if (endPressed) newCells[cell.row][cell.col] = { ...cell, isFinish: true };
     else if (sourcePressed)
       newCells[cell.row][cell.col] = { ...cell, isStart: true };
-    else if(cell.isStart)
-      {
-        source=true;
-      }
-    else newCells[cell.row][cell.col] = { ...cell, isWall: true };
+    else if (cell.isStart) {
+      source = true;
+    } else newCells[cell.row][cell.col] = { ...cell, isWall: true };
     makegrid(newCells);
     isMousePressed(true);
   }
@@ -156,11 +151,9 @@ function PathFinder() {
       var newCells = grid.slice();
       if (endPressed)
         newCells[cell.row][cell.col] = { ...cell, isFinish: true };
-      else if(source)
-         {
-           newCells[cell.row][cell.col] = { ...cell, isStart: true};
-         }
-      else if (sourcePressed)
+      else if (source) {
+        newCells[cell.row][cell.col] = { ...cell, isStart: true };
+      } else if (sourcePressed)
         newCells[cell.row][cell.col] = { ...cell, isStart: true };
       else
         newCells[cell.row][cell.col] = {
@@ -180,7 +173,23 @@ function PathFinder() {
   ];
 
   return (
-    <div className="container">
+    <div>
+      <Navbar className="nav-bar" variant="light" expand="lg">
+        <Navbar.Brand>Path Finder</Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="mr-auto">
+            <Nav.Link onClick={addWalls}>Add Walls</Nav.Link>
+            <Nav.Link onClick={addSources}>Add Sources</Nav.Link>
+            <Nav.Link onClick={addEnds}>Add destination</Nav.Link>
+          </Nav>
+          <Nav>
+            <Button onClick={main} variant="outline-success">
+              Start Search
+            </Button>
+          </Nav>
+        </Navbar.Collapse>
+      </Navbar>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Unreachable!!</Modal.Title>
@@ -189,34 +198,6 @@ function PathFinder() {
           Path doesn't exist between the given source and destination
         </Modal.Body>
       </Modal>
-
-      <ButtonGroup toggle>
-        {radios.map((radio, idx) => (
-          <ToggleButton
-            key={idx}
-            type="radio"
-            variant="outline-dark"
-            name="radio"
-            value={radio.value}
-            checked={radioValue === radio.value}
-            onChange={(e) => setRadioValue(e.currentTarget.value)}
-            onClick={() =>
-              radio.value == 3
-                ? addSources()
-                : radio.value == 2
-                ? addEnds()
-                : addWalls()
-            }
-          >
-            {radio.name}
-          </ToggleButton>
-        ))}
-      </ButtonGroup>
-      <span className="search">
-        <Button onClick={main} variant="outline-success">
-          Start Search
-        </Button>
-      </span>
 
       <div className="grid">
         {grid.map((row, rid) => (
