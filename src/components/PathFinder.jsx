@@ -103,7 +103,22 @@ function PathFinder() {
     isEndPressed(false);
     isSourcePressed(false);
   }
+function addRandomWalls()
+{
+  console.log(1)
+  var newCells = grid.slice();
+  var row;
+  var col;
+  var i;
+  for(i=0;i<50;i++){
+    row=Math.floor(Math.random() *(21-0));
+    col=Math.floor(Math.random() *(29-0));
+    if(!(grid[row][col].isStart) && !(grid[row][col].isFinish)){
 
+      newCells[row][col]={isWall:true};
+      makegrid(newCells);}
+}
+}
   function addEnds() {
     isEndPressed(true);
     isSourcePressed(false);
@@ -177,6 +192,7 @@ function PathFinder() {
     { name: "Add Walls", value: "1" },
     { name: "Add destinations", value: "2" },
     { name: "Add Sources", value: "3" },
+    { name: "Random Walls", value: "4" },
   ];
 
   return (
@@ -201,7 +217,9 @@ function PathFinder() {
             checked={radioValue === radio.value}
             onChange={(e) => setRadioValue(e.currentTarget.value)}
             onClick={() =>
-              radio.value == 3
+              radio.value == 4
+                ? addRandomWalls()
+                :radio.value == 3
                 ? addSources()
                 : radio.value == 2
                 ? addEnds()
@@ -218,7 +236,7 @@ function PathFinder() {
         </Button>
       </span>
 
-      <div className="grid">
+      <div className="grid" >
         {grid.map((row, rid) => (
           <div key={rid} className="row">
             {row.map((col, cid) => (
@@ -236,8 +254,10 @@ function PathFinder() {
                 isWall={col.isWall}
               />
             ))}
+
           </div>
         ))}
+
       </div>
     </div>
   );
