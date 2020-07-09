@@ -22,12 +22,12 @@ function PathFinder() {
 
   for (let i = 0; i < 22; i++) {
     var rows = [];
-    for (let j = 0; j < 30; j++) {
+    for (let j = 0; j < 53; j++) {
       var cur = {
         row: i,
         col: j,
-        isStart: i === 10 && j === 5,
-        isFinish: i === 10 && j === 24,
+        isStart: i === 10 && j === 18,
+        isFinish: i === 10 && j === 34,
         distance: Infinity,
         isVisited: false,
         isWall: false,
@@ -138,13 +138,13 @@ function PathFinder() {
     var i;
     var j;
     for (i = 0; i < 22; i++) {
-      for (j = 0; j < 30; j++) {
+      for (j = 0; j < 53; j++) {
         grid[i][j].isWall = false;
       }
     }
     for (i = 0; i < 50; i++) {
       row = Math.floor(Math.random() * (22 - 0));
-      col = Math.floor(Math.random() * (30 - 0));
+      col = Math.floor(Math.random() * (53 - 0));
       if (!grid[row][col].isStart && !grid[row][col].isFinish) {
         newCells[row][col] = { isWall: true };
         makegrid(newCells);
