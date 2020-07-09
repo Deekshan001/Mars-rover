@@ -96,10 +96,15 @@ function AStar(grid, start, end) {
       var gValue = curr.g + 1; //1 is distance from node to neighbour
       var IsBestgValue = false;
       if (!neighbour.visited) {
+        IsBestgValue=true;
         neighbour.h = heuristic(neighbour, end); //get heuristic value
         neighbour.visited = true;
         openList.push(neighbour);
-      } else if (IsBestgValue) {
+      } 
+      else if(gValue<neighboour.g){
+        IsBestgValue=true;
+      }     
+      if (IsBestgValue) {
         neighbour.parent = curr;
         neighbour.g = gValue;
         neighbour.f = neighbour.g + neighbour.h;
