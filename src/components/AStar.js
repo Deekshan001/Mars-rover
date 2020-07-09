@@ -101,7 +101,7 @@ function AStar(grid, start, end) {
         neighbour.visited = true;
         openList.push(neighbour);
       } 
-      else if(gValue<neighboour.g){
+      else if(gValue<neighbour.g){
         IsBestgValue=true;
       }     
       if (IsBestgValue) {
