@@ -1,17 +1,21 @@
 import React, { useState } from "react";
 import Node from "./Node.jsx";
 import Dijikstra from "./dijikstra.jsx";
-import { Button, Modal, ButtonGroup, ToggleButton, Nav } from "react-bootstrap";
+import { Button, Modal, Nav } from "react-bootstrap";
 import Navbar from "react-bootstrap/Navbar";
 var source = false;
-var destination=false;
-var time=0;
-var pathLen=0;
+var destination = false;
+var time = 0;
+var pathLen = 0;
+var drifts = [];
+var driftIndex = 1;
+var allDrifts = [];
 function PathFinder() {
   var cells = [];
   const [mousePressed, isMousePressed] = useState(false);
   const [endPressed, isEndPressed] = useState(false);
   const [sourcePressed, isSourcePressed] = useState(false);
+  const [driftPressed, isDriftPressed] = useState(false);
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -30,6 +34,8 @@ function PathFinder() {
         parent: null,
         pathChange: false,
         visChange: false,
+        isDrift: false,
+        driftNo: 0,
       };
       rows.push(cur);
     }
@@ -59,12 +65,12 @@ function PathFinder() {
   function visualizeDijkstra() {
     var start = retSources();
     var ends = retEnds();
-    var temp = Dijikstra(grid, start, ends);
+    var temp = Dijikstra(grid, start, ends, allDrifts);
     var path = temp.crawlBack;
-    time=temp.diff;
-    pathLen=temp.pathlen;
+    time = temp.diff;
+    pathLen = temp.pathlen;
     setTimeandPathLen();
-  //  setPathlen();
+    //  setPathlen();
     path.reverse();
     var visited = temp.nodesVisted;
     animateDijkstra(visited, path);
@@ -84,9 +90,9 @@ function PathFinder() {
       }
       setTimeout(() => {
         const node = visited[i];
-        if(!node.isStart && !node.isFinish)
-        document.getElementById(`cell-${node.row}-${node.col}`).className =
-          "cell intermediate-cell";
+        if (!node.isStart && !node.isFinish && !node.isDrift)
+          document.getElementById(`cell-${node.row}-${node.col}`).className =
+            "cell intermediate-cell";
       }, 5 * i);
     }
   }
@@ -99,9 +105,12 @@ function PathFinder() {
           handleShow();
           return;
         }
-        if(!node.isStart && !node.isFinish)
-        document.getElementById(`cell-${node.row}-${node.col}`).className =
-          "cell path-cell";
+        if (node.isDrift)
+          document.getElementById(`cell-${node.row}-${node.col}`).className =
+            "cell drift-path";
+        else if (!node.isStart && !node.isFinish)
+          document.getElementById(`cell-${node.row}-${node.col}`).className =
+            "cell path-cell";
       }, 50 * i);
     }
   }
@@ -117,13 +126,11 @@ function PathFinder() {
   function reset() {
     window.location.reload(false);
   }
-function setTimeandPathLen()
-{
-  const list=document.querySelector('.list');
-  list.children[0].innerHTML="Time:"+time;
-  list.children[1].innerHTML="PathLen:"+pathLen;
-
-}
+  function setTimeandPathLen() {
+    const list = document.querySelector(".list");
+    list.children[0].innerHTML = "Time:" + time;
+    list.children[1].innerHTML = "PathLen:" + pathLen;
+  }
   function addRandomWalls() {
     console.log(1);
     var newCells = grid.slice();
@@ -131,11 +138,9 @@ function setTimeandPathLen()
     var col;
     var i;
     var j;
-    for(i=0;i<22;i++)
-    {
-      for(j=0;j<30;j++)
-      {
-        grid[i][j].isWall=false
+    for (i = 0; i < 22; i++) {
+      for (j = 0; j < 30; j++) {
+        grid[i][j].isWall = false;
       }
     }
     for (i = 0; i < 50; i++) {
@@ -150,42 +155,49 @@ function setTimeandPathLen()
   function addEnds() {
     isEndPressed(true);
     isSourcePressed(false);
-    var ends = [[10, 24]];
   }
 
   function addSources() {
     isSourcePressed(true);
     isEndPressed(false);
-    var sources = [[10, 5]];
+  }
+
+  function addDrift() {
+    isDriftPressed(true);
+    isSourcePressed(false);
+    isEndPressed(false);
   }
 
   function OnMouseUp(cell) {
+    var newCells = grid.slice();
     if (source) {
-      var newCells = grid.slice();
       newCells[cell.row][cell.col] = { ...cell, isStart: true, isWall: false };
       source = false;
-      makegrid(newCells);
-    }
-    else if (destination) {
-      var newCells = grid.slice();
+    } else if (destination) {
       newCells[cell.row][cell.col] = { ...cell, isFinish: true, isWall: false };
       destination = false;
-      makegrid(newCells);
+    } else if (driftPressed) {
+      drifts.push(cell);
+      newCells[cell.row][cell.col] = {
+        ...cell,
+        isDrift: true,
+        driftNo: driftIndex,
+      };
+      allDrifts.push(drifts);
+      driftIndex += 1;
+      drifts = [];
     }
-
+    makegrid(newCells);
     isMousePressed(false);
   }
   function OnMouseLeave(cell) {
+    var newCells = grid.slice();
     if (source) {
-      var newCells = grid.slice();
       newCells[cell.row][cell.col] = { ...cell, isStart: false };
-      makegrid(newCells);
-    }
-    else if (destination) {
-      var newCells = grid.slice();
+    } else if (destination) {
       newCells[cell.row][cell.col] = { ...cell, isFinish: false };
-      makegrid(newCells);
     }
+    makegrid(newCells);
   }
   function OnMouseDown(cell) {
     var newCells = grid.slice();
@@ -194,9 +206,15 @@ function setTimeandPathLen()
       newCells[cell.row][cell.col] = { ...cell, isStart: true };
     else if (cell.isStart) {
       source = true;
-    }
-    else if (cell.isFinish) {
+    } else if (cell.isFinish) {
       destination = true;
+    } else if (driftPressed) {
+      drifts.push(cell);
+      newCells[cell.row][cell.col] = {
+        ...cell,
+        isDrift: true,
+        driftNo: driftIndex,
+      };
     } else newCells[cell.row][cell.col] = { ...cell, isWall: true };
     makegrid(newCells);
     isMousePressed(true);
@@ -207,14 +225,20 @@ function setTimeandPathLen()
       var newCells = grid.slice();
       if (endPressed)
         newCells[cell.row][cell.col] = { ...cell, isFinish: true };
-      else if (source) {
+      else if (source)
         newCells[cell.row][cell.col] = { ...cell, isStart: true };
-      }
-      else if (destination) {
+      else if (destination)
         newCells[cell.row][cell.col] = { ...cell, isFinish: true };
-      } else if (sourcePressed)
+      else if (sourcePressed)
         newCells[cell.row][cell.col] = { ...cell, isStart: true };
-      else
+      else if (driftPressed) {
+        drifts.push(cell);
+        newCells[cell.row][cell.col] = {
+          ...cell,
+          isDrift: true,
+          driftNo: driftIndex,
+        };
+      } else
         newCells[cell.row][cell.col] = {
           ...newCells[cell.row][cell.col],
           isWall: true,
@@ -225,14 +249,12 @@ function setTimeandPathLen()
 
   return (
     <div>
-      <ul class="list">
+      <ul className="list">
         <li>Time:0ms</li>
         <li>PathLen:0</li>
       </ul>
 
-
-
-      <Navbar className="nav-bar" variant="light" expand="lg">
+      <Navbar className="nav-bar" variant="dark" expand="lg">
         <Navbar.Brand>Path Finder</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
@@ -240,6 +262,7 @@ function setTimeandPathLen()
             <Nav.Link onClick={addWalls}>Add Walls</Nav.Link>
             <Nav.Link onClick={addSources}>Add Sources</Nav.Link>
             <Nav.Link onClick={addEnds}>Add destination</Nav.Link>
+            <Nav.Link onClick={addDrift}>Add Drifts</Nav.Link>
           </Nav>
           <Nav>
             <Nav.Link onClick={addRandomWalls}>Add Random Walls</Nav.Link>
@@ -275,6 +298,7 @@ function setTimeandPathLen()
                 onMouseUp={(cell) => OnMouseUp(cell)}
                 onMouseLeave={(cell) => OnMouseLeave(cell)}
                 isWall={col.isWall}
+                isDrift={col.isDrift}
               />
             ))}
           </div>

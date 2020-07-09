@@ -11,12 +11,15 @@ function f1(props) {
     onMouseUp,
     onMouseLeave,
     cell,
+    isDrift,
   } = props;
 
   const moreClasses = isFinish
     ? "end-cell"
     : isWall
     ? "wall"
+    : isDrift
+    ? "drift"
     : pathChange
     ? "path-cell"
     : isStart
@@ -27,15 +30,13 @@ function f1(props) {
 
   return (
     <div
-     id={`cell-${cell.row}-${cell.col}`}
+      id={`cell-${cell.row}-${cell.col}`}
       className={`cell ${moreClasses}`}
       onMouseDown={() => onMouseDown(cell)}
       onMouseEnter={() => onMouseEnter(cell)}
       onMouseUp={() => onMouseUp(cell)}
       onMouseLeave={() => onMouseLeave(cell)}
-    >
-    </div>
-
+    ></div>
   );
 }
 export default f1;
