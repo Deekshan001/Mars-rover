@@ -66,13 +66,12 @@ function PathFinder() {
     var start = retSources();
     var ends = retEnds();
     var temp = Dijikstra(grid, start, ends, allDrifts);
-    var path = temp.crawlBack;
+    var path = temp.path;
     time = temp.diff;
-    pathLen = temp.pathlen;
+    pathLen = temp.path.length - ends.length;
     setTimeandPathLen();
-    //  setPathlen();
-    path.reverse();
-    var visited = temp.nodesVisted;
+
+    var visited = temp.nodesVisited;
     animateDijkstra(visited, path);
   }
 

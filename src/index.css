@@ -19,9 +19,11 @@ code {
   outline: 1px solid #edffea;
   display: inline-block;
 }
+
 .column {
   display: inline;
 }
+
 .container {
   margin: 25px;
   justify-content: center;
@@ -33,36 +35,45 @@ code {
   margin-left: 100px;
   margin-top: 25px;
 }
+
 .start-cell {
   background-color: #bac964;
 }
+
 .end-cell {
   background-color: #a6b1e1;
 }
+
 .intermediate-cell {
   animation: visitedAnimation 1.2s ease-out 0s 1 alternate forwards running;
 }
+
 @keyframes visitedAnimation {
   0% {
     transform: scale(0.3);
     background-color: #8cba51;
     border-radius: 100%;
   }
+
   50% {
     background-color: #deff8b;
   }
+
   75% {
     transform: scale(1.2);
     background-color: #dbff3d;
   }
+
   100% {
     transform: scale(1);
     background-color: #c0ffb3;
   }
 }
+
 .search {
   margin: 20px;
 }
+
 .wall {
   background-color: black;
   outline: black;
@@ -133,8 +144,8 @@ code {
 
 .list {
   margin: 0;
-  z-index: -1;
-  background: white;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.5);
   border-radius: 6px;
   padding: 8px;
   position: fixed;
@@ -163,13 +174,16 @@ code {
   transform: scaleX(0);
   transition: all 0.3s ease-in-out;
 }
+
 .nav-link:hover:before {
   visibility: visible;
   transform: scaleX(1);
 }
+
 .nav-link:hover {
   font-weight: bold;
 }
+
 .select {
   font-weight: bold;
 }
