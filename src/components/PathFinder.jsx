@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Node from "./Node.jsx";
 import Dijikstra from "./dijikstra.jsx";
+import AStar from "./AStar.js";
 import { Button, Modal, Nav } from "react-bootstrap";
 import Navbar from "react-bootstrap/Navbar";
 var source = false;
@@ -65,8 +66,8 @@ function PathFinder() {
   function visualizeDijkstra() {
     var start = retSources();
     var ends = retEnds();
-    var temp = Dijikstra(grid, start, ends, allDrifts);
-    var path = temp.path;
+   var temp = Dijikstra(grid, start, ends, allDrifts);
+   var path = temp.path;
     time = temp.diff;
     pathLen = temp.path.length - ends.length;
     setTimeandPathLen();
@@ -121,7 +122,6 @@ function PathFinder() {
     isEndPressed(false);
     isSourcePressed(false);
   }
-
   function reset() {
     window.location.reload(false);
   }
