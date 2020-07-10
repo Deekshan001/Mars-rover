@@ -66,13 +66,20 @@ function PathFinder() {
   function visualizeDijkstra() {
     var start = retSources();
     var ends = retEnds();
-   var temp = Dijikstra(grid, start, ends, allDrifts);
+   /*var temp = Dijikstra(grid, start, ends, allDrifts);
    var path = temp.path;
     time = temp.diff;
     pathLen = temp.path.length - ends.length;
     setTimeandPathLen();
 
-    var visited = temp.nodesVisited;
+    var visited = temp.nodesVisited;*/
+    var temp = AStar(grid, start, ends);
+    var path = temp.path.reverse();
+     time = temp.diff;
+     pathLen = temp.path.length;
+     setTimeandPathLen();
+
+     var visited = temp.nodesVisited;
     animateDijkstra(visited, path);
   }
 
@@ -127,7 +134,7 @@ function PathFinder() {
   }
   function setTimeandPathLen() {
     const list = document.querySelector(".list");
-    list.children[0].innerHTML = "Time:" + time;
+    list.children[0].innerHTML = "Time:" + time +"ms";
     list.children[1].innerHTML = "PathLen:" + pathLen;
   }
   function addRandomWalls() {
@@ -249,7 +256,7 @@ function PathFinder() {
   return (
     <div>
       <ul className="list">
-        <li>Time:0ms</li>
+        <li>Time:0</li>
         <li>PathLen:0</li>
       </ul>
 
