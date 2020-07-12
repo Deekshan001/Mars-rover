@@ -158,7 +158,7 @@ code {
   background-color: #000839;
 }
 
-.nav-link {
+.nav-link{
   position: relative;
 }
 
@@ -183,7 +183,6 @@ code {
 .nav-link:hover {
   font-weight: bold;
 }
-
 .select {
   font-weight: bold;
 }

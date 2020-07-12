@@ -4,6 +4,8 @@ import Dijikstra from "./dijikstra.jsx";
 import AStar from "./AStar.js";
 import { Button, Modal, Nav } from "react-bootstrap";
 import Navbar from "react-bootstrap/Navbar";
+import Dropdown from 'react-bootstrap/Dropdown'
+import DropdownButton from 'react-bootstrap/DropdownButton'
 var source = false;
 var destination = false;
 var time = 0;
@@ -173,7 +175,6 @@ function PathFinder() {
     isSourcePressed(false);
     isEndPressed(false);
   }
-
   function OnMouseUp(cell) {
     var newCells = grid.slice();
     if (source) {
@@ -259,6 +260,7 @@ function PathFinder() {
         <li>Time:0</li>
         <li>PathLen:0</li>
       </ul>
+
 
       <Navbar className="nav-bar" variant="dark" expand="lg">
         <Navbar.Brand>Path Finder</Navbar.Brand>
