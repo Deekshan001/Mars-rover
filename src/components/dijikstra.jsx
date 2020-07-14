@@ -1,5 +1,5 @@
 function isSafe(x, y, cells) {
-  if (x >= 0 && y >= 0 && x < 22 && y < 53 && cells[x][y].isWall === false)
+  if (x >= 0 && y >= 0 && x < 22 && y < 59 && cells[x][y].isWall === false)
     return true;
   else return false;
 }
@@ -28,7 +28,6 @@ function gridreset(cells) {
 
 function Dijikstra(cells, start, ends, allDrifts) {
   var StartTime = new Date();
-  console.log(StartTime);
   var cur = null;
   var nodesVisited = [];
   var remainingEnds = ends.length;
@@ -73,10 +72,7 @@ function Dijikstra(cells, start, ends, allDrifts) {
             var x1 = r + dx[i];
             var y1 = c + dy[i];
             if (isSafe(x1, y1, cells)) {
-              if (cells[x1][y1].isFinish) {
-                cells[x1][y1].distance = 0;
-                cells[x1][y1].parent = cells[r][c];
-              } else if (cells[x1][y1].distance > cells[r][c].distance + 1) {
+              if (cells[x1][y1].distance > cells[r][c].distance + 1) {
                 cells[x1][y1].distance = cells[r][c].distance + 1;
                 cells[x1][y1].parent = cells[r][c];
               }
@@ -122,11 +118,8 @@ function Dijikstra(cells, start, ends, allDrifts) {
   }
 
   var EndTime = new Date();
-  console.log(EndTime);
   var diff = EndTime - StartTime - refTime;
   diff = diff + "ms";
-  console.log("diff= " + diff);
-
   for (let i = 0; i < changeEnds.length; i++) {
     changeEnds[i].isFinish = true;
   }

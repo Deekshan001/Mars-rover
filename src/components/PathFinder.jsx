@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Node from "./Node.jsx";
 import Dijikstra from "./dijikstra.jsx";
 import AStar from "./AStar.js";
-import { Button, Modal, Nav } from "react-bootstrap";
+import { Button, Modal, Nav, NavDropdown } from "react-bootstrap";
 import Navbar from "react-bootstrap/Navbar";
 var source = false;
 var destination = false;
@@ -17,13 +17,14 @@ function PathFinder() {
   const [endPressed, isEndPressed] = useState(false);
   const [sourcePressed, isSourcePressed] = useState(false);
   const [driftPressed, isDriftPressed] = useState(false);
+  const [AstarSel, isAstarClicked] = useState(false);
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
   for (let i = 0; i < 22; i++) {
     var rows = [];
-    for (let j = 0; j < 53; j++) {
+    for (let j = 0; j < 59; j++) {
       var cur = {
         row: i,
         col: j,
@@ -63,20 +64,26 @@ function PathFinder() {
     return sources;
   }
 
-  function visualizeDijkstra() {
+  function visualize() {
     var start = retSources();
     var ends = retEnds();
-   var temp = Dijikstra(grid, start, ends, allDrifts);
-   var path = temp.path;
+    var temp, path, visited;
+    if (AstarSel) {
+      temp = AStar(grid, start, ends);
+      visited = temp.nodeVisited;
+      path = temp.ret.reverse();
+    } else {
+      temp = Dijikstra(grid, start, ends, allDrifts);
+      path = temp.path;
+      visited = temp.nodesVisited;
+    }
     time = temp.diff;
-    pathLen = temp.path.length - ends.length;
+    pathLen = path.length - ends.length;
     setTimeandPathLen();
-
-    var visited = temp.nodesVisited;
-    animateDijkstra(visited, path);
+    animateVisited(visited, path);
   }
 
-  function animateDijkstra(visited, path) {
+  function animateVisited(visited, path) {
     for (let i = 0; i <= visited.length; i++) {
       if (i === visited.length) {
         setTimeout(() => {
@@ -116,7 +123,7 @@ function PathFinder() {
   }
 
   function main() {
-    visualizeDijkstra();
+    visualize();
   }
   function addWalls() {
     isEndPressed(false);
@@ -138,13 +145,13 @@ function PathFinder() {
     var i;
     var j;
     for (i = 0; i < 22; i++) {
-      for (j = 0; j < 53; j++) {
+      for (j = 0; j < 59; j++) {
         grid[i][j].isWall = false;
       }
     }
     for (i = 0; i < 50; i++) {
       row = Math.floor(Math.random() * (22 - 0));
-      col = Math.floor(Math.random() * (53 - 0));
+      col = Math.floor(Math.random() * (59 - 0));
       if (!grid[row][col].isStart && !grid[row][col].isFinish) {
         newCells[row][col] = { isWall: true };
         makegrid(newCells);
@@ -247,7 +254,7 @@ function PathFinder() {
   }
 
   return (
-    <div>
+    <div className="contain">
       <ul className="list">
         <li>Time:0ms</li>
         <li>PathLen:0</li>
@@ -262,6 +269,14 @@ function PathFinder() {
             <Nav.Link onClick={addSources}>Add Sources</Nav.Link>
             <Nav.Link onClick={addEnds}>Add destination</Nav.Link>
             <Nav.Link onClick={addDrift}>Add Drifts</Nav.Link>
+            <NavDropdown title="Algorithm" id="basic-nav-dropdown">
+              <NavDropdown.Item onClick={() => isAstarClicked(false)}>
+                Dijikstra
+              </NavDropdown.Item>
+              <NavDropdown.Item onClick={() => isAstarClicked(true)}>
+                A Star
+              </NavDropdown.Item>
+            </NavDropdown>
           </Nav>
           <Nav>
             <Nav.Link onClick={addRandomWalls}>Add Random Walls</Nav.Link>
@@ -272,6 +287,7 @@ function PathFinder() {
           </Nav>
         </Navbar.Collapse>
       </Navbar>
+
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Unreachable!!</Modal.Title>

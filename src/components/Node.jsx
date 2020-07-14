@@ -36,7 +36,9 @@ function f1(props) {
       onMouseEnter={() => onMouseEnter(cell)}
       onMouseUp={() => onMouseUp(cell)}
       onMouseLeave={() => onMouseLeave(cell)}
-    ></div>
+    >
+      {pathChange && <hr />}
+    </div>
   );
 }
 export default f1;
