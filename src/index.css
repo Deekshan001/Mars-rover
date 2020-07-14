@@ -185,3 +185,6 @@ code {
 .dropdown-menu {
   background: rgba(255, 255, 255, 0.2);
 }
+.nav-link:hover {
+  font-weight: bold;
+}

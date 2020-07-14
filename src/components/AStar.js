@@ -55,12 +55,12 @@ function remove(list, item) {
 
 //a* algorithm
 function AStar(grid, start, end) {
+  var startDate = new Date();
   initialize(grid);
   var StartTime = new Date();
   var openList = [];
-  var nodeVisited = [];
-  var s = grid[start[0][0]][start[0][1]];
-  openList = [s];
+  var nodesVisited = [];
+  openList.push(grid[start[0][0]][start[0][1]]);
   while (openList.length > 0) {
     //get index of lowest f(x)
     var LowIndex = 0;
@@ -70,27 +70,25 @@ function AStar(grid, start, end) {
       }
     }
     var curr = openList[LowIndex];
-
     //Case 1: if destination is found
 
     if (curr === grid[end[0][0]][end[0][1]]) {
       curr.isVisited = true;
       grid[curr.row][curr.col] = curr;
       var cur = curr;
-      var ret = [];
+      var path = [];
       while (cur.parent) {
-        ret.push(cur);
+        path.push(cur);
         cur = cur.parent;
       }
-      var EndTime = new Date();
-      var diff = EndTime - StartTime;
-      diff = diff + "ms";
-      return { ret, nodeVisited, diff }; //retrace path
+      var endDate = new Date();
+      var diff = Math.abs(startDate - endDate);
+      return { path, nodesVisited, diff }; //retrace path
     }
 
     //case 2:normal case - remove node from open and mark as close, and process its neighbours
     remove(openList, curr);
-    nodeVisited.push(curr);
+    nodesVisited.push(curr);
     curr.closed = true;
     grid[curr.row][curr.col] = curr;
     var neighbours = getNeighbours(grid, curr); //get list of neighbours
@@ -109,7 +107,7 @@ function AStar(grid, start, end) {
         neighbour.h = heuristic(neighbour, grid[end[0][0]][end[0][1]]); //get heuristic value
         neighbour.isVisited = true;
         openList.push(neighbour);
-        nodeVisited.push(neighbour);
+        nodesVisited.push(neighbour);
       } else if (gValue < neighbour.g) {
         IsBestgValue = true;
       }

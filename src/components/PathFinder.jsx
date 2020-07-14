@@ -4,6 +4,8 @@ import Dijikstra from "./dijikstra.jsx";
 import AStar from "./AStar.js";
 import { Button, Modal, Nav, NavDropdown } from "react-bootstrap";
 import Navbar from "react-bootstrap/Navbar";
+import Dropdown from "react-bootstrap/Dropdown";
+import DropdownButton from "react-bootstrap/DropdownButton";
 var source = false;
 var destination = false;
 var time = 0;
@@ -134,7 +136,7 @@ function PathFinder() {
   }
   function setTimeandPathLen() {
     const list = document.querySelector(".list");
-    list.children[0].innerHTML = "Time:" + time;
+    list.children[0].innerHTML = "Time:" + time + "ms";
     list.children[1].innerHTML = "PathLen:" + pathLen;
   }
   function addRandomWalls() {
@@ -173,7 +175,6 @@ function PathFinder() {
     isSourcePressed(false);
     isEndPressed(false);
   }
-
   function OnMouseUp(cell) {
     var newCells = grid.slice();
     if (source) {
@@ -256,7 +257,7 @@ function PathFinder() {
   return (
     <div className="contain">
       <ul className="list">
-        <li>Time:0ms</li>
+        <li>Time:0</li>
         <li>PathLen:0</li>
       </ul>
 
