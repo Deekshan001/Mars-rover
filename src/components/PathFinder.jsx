@@ -4,8 +4,7 @@ import Dijikstra from "./dijikstra.jsx";
 import AStar from "./AStar.js";
 import { Button, Modal, Nav, NavDropdown } from "react-bootstrap";
 import Navbar from "react-bootstrap/Navbar";
-import Dropdown from "react-bootstrap/Dropdown";
-import DropdownButton from "react-bootstrap/DropdownButton";
+
 var source = false;
 var destination = false;
 var time = 0;
@@ -13,6 +12,8 @@ var pathLen = 0;
 var drifts = [];
 var driftIndex = 1;
 var allDrifts = [];
+var path = [];
+var visited = [];
 function PathFinder() {
   var cells = [];
   const [mousePressed, isMousePressed] = useState(false);
@@ -69,16 +70,19 @@ function PathFinder() {
   function visualize() {
     var start = retSources();
     var ends = retEnds();
-    var temp, path, visited;
+    console.log(grid[ends[0][0]][ends[0][1]]);
+    console.log(start, ends);
+    var temp;
     if (AstarSel) {
       temp = AStar(grid, start, ends);
-      visited = temp.nodeVisited;
-      path = temp.ret.reverse();
+      path = temp.path.reverse();
     } else {
       temp = Dijikstra(grid, start, ends, allDrifts);
       path = temp.path;
-      visited = temp.nodesVisited;
+      console.log(path);
     }
+
+    visited = temp.nodesVisited;
     time = temp.diff;
     pathLen = path.length - ends.length;
     setTimeandPathLen();
@@ -124,7 +128,32 @@ function PathFinder() {
     }
   }
 
+  function clearpaths() {
+    visited = [];
+    path = [];
+    var newCells = grid.slice();
+    for (let i = 0; i < newCells.length; i++)
+      for (let j = 0; j < newCells[i].length; j++) {
+        newCells[i][j] = {
+          ...newCells[i][j],
+          isVisited: false,
+          distance: Infinity,
+        };
+        console.log(newCells[i][j]);
+        if (
+          !newCells[i][j].isStart &&
+          !newCells[i][j].isFinish &&
+          !newCells[i][j].isWall &&
+          !newCells[i][j].isDrift &&
+          document.getElementById(`cell-${i}-${j}`) != null
+        )
+          document.getElementById(`cell-${i}-${j}`).className = "cell";
+      }
+    makegrid(newCells);
+  }
+
   function main() {
+    clearpaths();
     visualize();
   }
   function addWalls() {
@@ -140,6 +169,7 @@ function PathFinder() {
     list.children[1].innerHTML = "PathLen:" + pathLen;
   }
   function addRandomWalls() {
+    clearpaths();
     console.log(1);
     var newCells = grid.slice();
     var row;
@@ -151,7 +181,7 @@ function PathFinder() {
         grid[i][j].isWall = false;
       }
     }
-    for (i = 0; i < 50; i++) {
+    for (i = 0; i < 100; i++) {
       row = Math.floor(Math.random() * (22 - 0));
       col = Math.floor(Math.random() * (59 - 0));
       if (!grid[row][col].isStart && !grid[row][col].isFinish) {
@@ -228,7 +258,7 @@ function PathFinder() {
   }
 
   function OnMouseEnter(cell) {
-    if (mousePressed) {
+    if (mousePressed && cell.row != undefined) {
       var newCells = grid.slice();
       if (endPressed)
         newCells[cell.row][cell.col] = { ...cell, isFinish: true };

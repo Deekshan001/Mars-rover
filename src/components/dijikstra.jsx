@@ -119,7 +119,6 @@ function Dijikstra(cells, start, ends, allDrifts) {
 
   var EndTime = new Date();
   var diff = EndTime - StartTime - refTime;
-  diff = diff + "ms";
   for (let i = 0; i < changeEnds.length; i++) {
     changeEnds[i].isFinish = true;
   }
