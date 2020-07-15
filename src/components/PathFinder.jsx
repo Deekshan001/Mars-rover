@@ -148,6 +148,14 @@ function PathFinder() {
           document.getElementById(`cell-${i}-${j}`) != null
         )
           document.getElementById(`cell-${i}-${j}`).className = "cell";
+        if (
+          !newCells[i][j].isStart &&
+          !newCells[i][j].isFinish &&
+          !newCells[i][j].isWall &&
+          newCells[i][j].isDrift &&
+          document.getElementById(`cell-${i}-${j}`) != null
+        )
+          document.getElementById(`cell-${i}-${j}`).className = "cell drift";
       }
     makegrid(newCells);
   }
