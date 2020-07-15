@@ -213,6 +213,77 @@ function PathFinder() {
     isSourcePressed(false);
     isEndPressed(false);
   }
+
+  function popup(){
+    const div=document.querySelector("#firstpage")
+    div.style.display="block";
+
+  }
+  function actioPerformed(page,action)
+  {console.log("actioPerformed",page,action)
+    if(action=="skip")
+    {
+      const div1=document.querySelectorAll(".contain2")
+      for(var i=0;i<div1.length;i++)
+      div1[i].style.display="none";
+    }
+    else if(page==="first" && action==="next")
+    {
+      const div1=document.querySelector("#secondpage")
+      const ul=document.querySelector("#secondul")
+      ul.children[1].style.background="#a6b1e1";
+      ul.children[2].style.background="black";
+      ul.children[3].style.background=""
+      ul.children[4].style.background="#6b0d0d"
+      ul.children[4].style.border="2px dashed brown"
+      ul.children[5].style.background="#dcd6f7"
+      const div2=document.querySelector("#firstpage")
+      div1.style.display="block";
+      div2.style.display="none";
+    }
+    else if(page=="second" && action=="next")
+    {
+      const div1=document.querySelector("#thirdpage")
+      const div2=document.querySelector("#secondpage")
+      div1.style.display="block";
+      div2.style.display="none";
+    }
+    else if(page==="second" && action==="previous")
+    {
+      const div1=document.querySelector("#firstpage")
+      const div2=document.querySelector("#secondpage")
+      div1.style.display="block";
+      div2.style.display="none";
+    }
+    else if(page=="third" && action=="next")
+    {
+      const div1=document.querySelector("#fourthpage")
+      const div2=document.querySelector("#thirdpage")
+      div1.style.display="block";
+      div2.style.display="none";
+    }
+    else if(page==="third" && action==="previous")
+    {
+      const div1=document.querySelector("#secondpage")
+      const div2=document.querySelector("#thirdpage")
+      div1.style.display="block";
+      div2.style.display="none";
+    }
+    else if(page=="fourth" && action=="finish")
+    {
+      const div1=document.querySelector("#fourthpage")
+      div1.style.display="none";
+    }
+    else if(page==="fourth" && action==="previous")
+    {
+      const div1=document.querySelector("#thirdpage")
+      const div2=document.querySelector("#fourthpage")
+      div1.style.display="block";
+      div2.style.display="none";
+    }
+
+  }
+
   function OnMouseUp(cell) {
     var newCells = grid.slice();
     if (source) {
@@ -298,6 +369,93 @@ function PathFinder() {
         <li>Time:0</li>
         <li>PathLen:0</li>
       </ul>
+      <div className="contain2" id="firstpage">
+      <div className="list2">
+      <header align="center">
+        Welcome to MarsRover PathFinder
+      </header>
+      <section>
+      <p>
+        This short tutorial will walk you through all of the features
+      of this application.</p>
+      <p className="secP">
+        If you want to dive right in, feel free to press the
+      "Skip Description" button below.Otherwise, press "Next"!</p>
+      </section>
+      <footer display="grid">
+      <button class="btn btn-dark" type="button" onClick={() =>actioPerformed("firstpage","skip")}>SkipDescription</button>
+
+      <button class="btn btn-dark" type="button" onClick={() =>actioPerformed("first","next")}>Next</button>
+      </footer>
+      </div>
+      </div>
+
+      <div className="contain2" id="secondpage">
+      <div className="list2">
+      <header align="center">
+        Important points to be noted
+      </header>
+      <section>
+      <p>
+        All of the algorithms on this application are adapted for a 2D grid, where 90 degree turns have a "cost" of 1
+        and movements from a node to another have a "cost" of 1.</p>
+      <ul id="secondul">
+      <li>StartNode</li>
+      <li>EndNode</li>
+      <li>WallNode</li>
+      <li>DriftNode</li>
+      <li>VisitedNode</li>
+      <li>PathNode</li>
+      </ul>
+      </section>
+      <footer display="grid">
+      <button class="btn btn-dark" type="button" onClick={() =>actioPerformed("secondpage","skip")}>SkipDescription</button>
+      <button class="btn btn-dark" type="button" onClick={() =>actioPerformed("second","previous")}>Previous</button>
+      <button class="btn btn-dark" type="button" onClick={() =>actioPerformed("second","next")}>Next</button>
+      </footer>
+      </div>
+      </div>
+
+      <div className="contain2" id="fourthpage">
+      <div className="list2">
+      <header align="center">
+        Visualizing and more
+      </header>
+      <section>
+      <p>
+        Use the navbar buttons to visualize algorithms</p>
+        <p className="secP">
+        You can addWalls,addRandomWalls, addDrifts , reset the entire board, choose algorithms
+        all from the navbar. If you want to access this description again, click on "Description".</p>
+      </section>
+      <footer display="grid">
+      <button class="btn btn-dark" type="button" onClick={() =>actioPerformed("fourthpage","skip")}>SkipDescription</button>
+      <button class="btn btn-dark" type="button" onClick={() =>actioPerformed("fourth","previous")}>Previous</button>
+      <button class="btn btn-dark" type="button" onClick={() =>actioPerformed("fourth","finish")}>Finish</button>
+      </footer>
+      </div>
+      </div>
+
+      <div className="contain2" id="thirdpage">
+      <div className="list2">
+      <header align="center">
+        Picking an Algorithm
+      </header>
+      <section>
+      <p>
+        Choose an algorithm from the "Algorithms" drop-down menu.</p>
+      </section>
+      <footer display="grid">
+      <button class="btn btn-dark" type="button" onClick={() =>actioPerformed("thirdpage","skip")}>SkipDescription</button>
+      <button class="btn btn-dark" type="button" onClick={() =>actioPerformed("third","previous")}>Previous</button>
+      <button class="btn btn-dark" type="button" onClick={() =>actioPerformed("third","next")}>Next</button>
+      </footer>
+      </div>
+      </div>
+
+
+
+
 
       <Navbar className="nav-bar" variant="dark" expand="lg">
         <Navbar.Brand>Path Finder</Navbar.Brand>
@@ -308,7 +466,7 @@ function PathFinder() {
             <Nav.Link onClick={addSources}>Add Sources</Nav.Link>
             <Nav.Link onClick={addEnds}>Add destination</Nav.Link>
             <Nav.Link onClick={addDrift}>Add Drifts</Nav.Link>
-            <NavDropdown title="Algorithm" id="basic-nav-dropdown">
+            <NavDropdown title="Algorithms" id="basic-nav-dropdown">
               <NavDropdown.Item onClick={() => isAstarClicked(false)}>
                 Dijikstra
               </NavDropdown.Item>
@@ -316,6 +474,7 @@ function PathFinder() {
                 A Star
               </NavDropdown.Item>
             </NavDropdown>
+            <Nav.Link onClick={popup}>Description</Nav.Link>
           </Nav>
           <Nav>
             <Nav.Link onClick={addRandomWalls}>Add Random Walls</Nav.Link>
