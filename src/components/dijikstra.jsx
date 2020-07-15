@@ -34,6 +34,7 @@ function Dijikstra(cells, start, ends, allDrifts) {
   var refTime = 0;
   var path = [];
   var changeEnds = [];
+  var n = 0;
 
   for (let i = 0; i < start.length; i++) {
     cur = cells[start[i][0]][start[i][1]];
@@ -97,11 +98,20 @@ function Dijikstra(cells, start, ends, allDrifts) {
         cur.isFinish = false;
         changeEnds.push(cur);
         path = path.concat(crawlBack(cur).reverse());
-
         var refStart = new Date();
         gridreset(cells);
         var refEnd = new Date();
         refTime += refEnd - refStart;
+        console.log(path[n]);
+        if (path[n] != null) {
+          var x = [path[n].row, path[n].col];
+          n = path.length - 1;
+
+          for (let j = 0; j < start.length; j++) {
+            if (x[0] == start[j][0] && x[1] == start[j][1]) start.splice(j, 1);
+            else cells[start[j][0]][start[j][1]].distance = 0;
+          }
+        }
 
         cur.isVisited = true;
         cur.distance = 0;
