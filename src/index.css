@@ -5,7 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-image: url("./images/Surface.jpg");
+  background-image: url("./images/Surface2.jpg");
 }
 
 code {
@@ -25,12 +25,17 @@ code {
   display: inline;
 }
 
+.row {
+  margin: 0px;
+}
+
 .contain {
   width: 100%;
 }
+
 .grid {
+  opacity: 0.8;
   margin-top: 25px;
-  margin-left: 50px;
 }
 
 .start-cell {
@@ -63,8 +68,7 @@ code {
 
   100% {
     transform: scale(1);
-    background-color: rgba(0, 0, 0, 0);
-    border: 1px dashed brown;
+    background-color: #c05524;
   }
 }
 
@@ -152,6 +156,7 @@ code {
   left: 105px;
   list-style-type: none;
 }
+
 .contain2 {
   margin-left: auto;
   margin-right: auto;
@@ -159,6 +164,7 @@ code {
 
   vertical-align: middle;
 }
+
 .list2 {
   /*display: none;*/
   width: 600px;
@@ -174,11 +180,13 @@ code {
   padding: 8px;
   z-index: 1;
 }
+
 .list2 header {
   font-size: 50px;
   font-style: oblique;
   color: black;
 }
+
 .list2 section p {
   margin-top: 30px;
   padding: 20px;
@@ -187,6 +195,7 @@ code {
   font-weight: bold;
   text-align: center;
 }
+
 .list2 section .secP {
   padding: 20px;
   justify-content: center;
@@ -194,12 +203,14 @@ code {
   font-style: italic;
   font-weight: normal;
 }
+
 .list2 footer {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   position: relative;
   bottom: 10px;
 }
+
 .list2 footer button {
   display: block;
   margin: 10px;
@@ -208,12 +219,15 @@ code {
 #secondpage {
   display: none;
 }
+
 #thirdpage {
   display: none;
 }
+
 #fourthpage {
   display: none;
 }
+
 #secondpage .list2 section ul {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -222,6 +236,7 @@ code {
   width: 80%;
   vertical-align: middle;
 }
+
 #secondpage .list2 section ul li {
   display: block;
   font-size: 18px;
@@ -231,14 +246,17 @@ code {
   border-radius: 6px;
   text-align: center;
 }
+
 .nav-bar {
-  /* background-color: #000839; */
-  background: rgba(0, 0, 0, 0);
+  background-color: #000839;
 }
 
 .nav-link {
   position: relative;
-  letter-spacing: 0.1em;
+}
+
+.nav-link:focus {
+  font-weight: bold;
 }
 
 .nav-link:before {
@@ -261,8 +279,9 @@ code {
 }
 
 .dropdown-menu {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.8);
 }
+
 .nav-link:hover {
   font-weight: bold;
 }

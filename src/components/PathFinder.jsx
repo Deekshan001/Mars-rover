@@ -25,9 +25,12 @@ function PathFinder() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  var ncol = Math.floor(window.screen.availWidth / 25) - 1;
+  console.log(ncol);
+
   for (let i = 0; i < 22; i++) {
     var rows = [];
-    for (let j = 0; j < 59; j++) {
+    for (let j = 0; j < ncol; j++) {
       var cur = {
         row: i,
         col: j,
@@ -180,13 +183,13 @@ function PathFinder() {
     var i;
     var j;
     for (i = 0; i < 22; i++) {
-      for (j = 0; j < 59; j++) {
+      for (j = 0; j < ncol; j++) {
         grid[i][j].isWall = false;
       }
     }
     for (i = 0; i < 100; i++) {
       row = Math.floor(Math.random() * (22 - 0));
-      col = Math.floor(Math.random() * (59 - 0));
+      col = Math.floor(Math.random() * (ncol - 0));
       if (!grid[row][col].isStart && !grid[row][col].isFinish) {
         newCells[row][col] = { isWall: true };
         makegrid(newCells);
@@ -514,7 +517,7 @@ function PathFinder() {
           <Nav>
             <Nav.Link onClick={addRandomWalls}>Add Random Walls</Nav.Link>
             <Nav.Link onClick={reset}>Reset Grid</Nav.Link>
-            <Button onClick={main} variant="outline-success">
+            <Button onClick={main} variant="success">
               Start Search
             </Button>
           </Nav>
@@ -532,7 +535,7 @@ function PathFinder() {
 
       <div className="grid">
         {grid.map((row, rid) => (
-          <div key={rid} className="row">
+          <div key={rid} className="row justify-content-center">
             {row.map((col, cid) => (
               <Node
                 key={cid}
