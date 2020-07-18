@@ -134,6 +134,7 @@ function AStar(grid, start, end, diagnol, heuristic,heuristic2) {
         path.push(cur);
         cur = cur.parent;
       }
+      path.push(grid[start[0][0]][start[0][1]])
       var endDate = new Date();
       var diff = Math.abs(startDate - endDate);
       return { path, nodesVisited, diff }; //retrace path
