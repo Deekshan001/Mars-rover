@@ -82,7 +82,7 @@ function PathFinder() {
       temp = AStar(grid, start, ends,diagClicked,euclidClicked,chebyshevClicked);
       path = temp.path.reverse();
     } else {
-      temp = Dijikstra(grid, start, ends, allDrifts);
+      temp = Dijikstra(grid, start, ends, allDrifts,diagClicked);
       path = temp.path;
     }
 
