@@ -515,18 +515,18 @@ function PathFinder() {
             <NavDropdown title="Algorithms" id="basic-nav-dropdown">
                 <NavDropdown drop="right" classname="Dropdownmenuclass" title="Dijikstra" id="basic-nav-dropdown" onClick={() => isAstarClicked(false)}>
                     <NavDropdown.Header variant="dark">OPTIONS</NavDropdown.Header>
-                      <NavDropdown.Item onClick={() => isDiagMovementClicked(true)}>WithDiagnolMovements</NavDropdown.Item>
-                      <NavDropdown.Item onClick={() => isDiagMovementClicked(false)}>WithoutDiagnolMovements</NavDropdown.Item>
+                      <NavDropdown.Item onClick={() => isDiagMovementClicked(true)}>WithDiagonolMovements</NavDropdown.Item>
+                      <NavDropdown.Item onClick={() => isDiagMovementClicked(false)}>WithoutDiagonolMovements</NavDropdown.Item>
                 </NavDropdown>
                 <NavDropdown drop="right" classname="Dropdownmenuclass" title="A Star" id="basic-nav-dropdown" onClick={() => isAstarClicked(true)}>
                     <NavDropdown.Header variant="dark">OPTIONS</NavDropdown.Header>
-                        <NavDropdown drop="right" classname="Dropdownmenuclass" title="WithDiagnolMovements" id="basic-nav-dropdown" onClick={() => isDiagMovementClicked(true)}>
+                        <NavDropdown drop="right" classname="Dropdownmenuclass" title="WithDiagonolMovements" id="basic-nav-dropdown" onClick={() => isDiagMovementClicked(true)}>
                             <NavDropdown.Header variant="dark">HEURISTICS</NavDropdown.Header>
                               <NavDropdown.Item  onClick={() => isEuclidianClicked(true)}>EUCLIDIAN</NavDropdown.Item>
                               <NavDropdown.Item onClick={() => heuristicChebyshevClicked(true)}>CHEBYSHEV</NavDropdown.Item>
                               <NavDropdown.Item onClick={() => heuristicChebyshevClicked(false)}>OCTILE</NavDropdown.Item>
                         </NavDropdown>
-                        <NavDropdown drop="right" classname="Dropdownmenuclass" title="WithoutDiagnolMovements" id="basic-nav-dropdown" onClick={() => isDiagMovementClicked(false)}>
+                        <NavDropdown drop="right" classname="Dropdownmenuclass" title="WithoutDiagonolMovements" id="basic-nav-dropdown" onClick={() => isDiagMovementClicked(false)}>
                             <NavDropdown.Header variant="dark">HEURISTICS</NavDropdown.Header>
                               <NavDropdown.Item onClick={() => isEuclidianClicked(false)}>MANHATTAN</NavDropdown.Item>
                               <NavDropdown.Item onClick={() => isEuclidianClicked(true)}>EUCLIDIAN</NavDropdown.Item>
