@@ -26,7 +26,7 @@ function gridreset(cells) {
   }
 }
 
-function Diji1stra(cells, start, ends, allDrifts,option) {
+function Dijikstra(cells, start, ends, allDrifts,option) {
   var StartTime = new Date();
   var cur = null;
   var nodesVisited = [];
@@ -110,7 +110,7 @@ function Diji1stra(cells, start, ends, allDrifts,option) {
         remainingEnds -= 1;
         cur.isFinish = false;
         changeEnds.push(cur);
-        path = path.concat(crawlBac1(cur).reverse());
+        path = path.concat(crawlBack(cur).reverse());
 
         var refStart = new Date();
         gridreset(cells);
@@ -148,14 +148,14 @@ function Diji1stra(cells, start, ends, allDrifts,option) {
   return { diff, path, nodesVisited };
 }
 
-function crawlBac1(cur) {
-  var crawlBac1 = [];
-  crawlBac1.push(cur);
+function crawlBack(cur) {
+  var crawlBack = [];
+  crawlBack.push(cur);
   while (cur !== null) {
     cur = cur.parent;
-    if (cur !== null) crawlBac1.push(cur);
+    if (cur !== null) crawlBack.push(cur);
   }
-  return crawlBac1;
+  return crawlBack;
 }
 
-export default Diji1stra;
+export default Dijikstra;
