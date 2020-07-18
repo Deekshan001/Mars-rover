@@ -41,11 +41,51 @@ function getNeighbours(grid, node) {
   return ret;
 }
 
+function getNeighboursDiagnol(grid, node) {
+  var ret = [];
+  var x = node.row;
+  var y = node.col;
+  if (isSafe(x - 1, y, grid)) {
+    ret.push(grid[x - 1][y]);
+  }
+  if (isSafe(x + 1, y, grid)) {
+    ret.push(grid[x + 1][y]);
+  }
+  if (isSafe(x, y - 1, grid)) {
+    ret.push(grid[x][y - 1]);
+  }
+  if (isSafe(x, y + 1, grid)) {
+    ret.push(grid[x][y + 1]);
+  }
+  if (isSafe(x + 1, y + 1, grid)) {
+    ret.push(grid[x + 1][y + 1]);
+  }
+  if (isSafe(x + 1, y - 1, grid)) {
+    ret.push(grid[x + 1][y - 1]);
+  }
+  if (isSafe(x - 1, y + 1, grid)) {
+    ret.push(grid[x - 1][y + 1]);
+  }
+  if (isSafe(x - 1, y - 1, grid)) {
+    ret.push(grid[x - 1][y - 1]);
+  }
+  return ret;
+}
+
 //function to calculate heuristic value
-function heuristic(node1, node2) {
+function heuristicManhattan(node1, node2) {
   var d1 = Math.abs(node1.row - node2.row); //Manhatten distance
   var d2 = Math.abs(node1.col - node2.col);
   return d1 + d2;
+}
+//function to calculate heuristic value
+function heuristicDiagnol(node1, node2) {
+  return Math.max(Math.abs(node1.row – node2.row),
+           Math.abs(node1.col – node.col)) ;
+}
+//function to calculate heuristic value
+function heuristicEuclidean(node1, node2) {
+  return Math.sqrt(Math.pow((node1.row – node2.row),2)+Math.pow((node1.col – node2.col),2)) ;
 }
 
 function remove(list, item) {
@@ -64,7 +104,8 @@ function crawlBack(cur) {
 }
 
 //a* algorithm
-function AStar(grid, start, end) {
+function AStar(grid, start, end, diagnol, heuristic) {
+  console.log("1");
   var startDate = new Date();
   initialize(grid);
   var openList = [];
@@ -94,13 +135,21 @@ function AStar(grid, start, end) {
       var diff = Math.abs(startDate - endDate);
       return { path, nodesVisited, diff }; //retrace path
     }
-
+    console.log("diagnol choosen 0")
     //case 2:normal case - remove node from open and mark as close, and process its neighbours
     remove(openList, curr);
     nodesVisited.push(curr);
     curr.closed = true;
     grid[curr.row][curr.col] = curr;
-    var neighbours = getNeighbours(grid, curr); //get list of neighbours
+    if(!diagnol)
+    {
+      console.log("diagnol choosen")
+      var neighbours = getNeighbours(grid, curr); //get list of neighbours
+    }
+    else {
+      console.log("diagnol choosen")
+      var neighbours = getNeighboursDiagnol(grid, curr);
+    }
     for (i = 0; i < neighbours.length; i++) {
       var neighbour = neighbours[i]; //for each neighbour
       if (neighbour.closed || neighbour.isWall) {
@@ -113,7 +162,12 @@ function AStar(grid, start, end) {
       var IsBestgValue = false;
       if (!neighbour.isVisited) {
         IsBestgValue = true;
-        neighbour.h = heuristic(neighbour, grid[end[0][0]][end[0][1]]); //get heuristic value
+        if(heuristic)
+          neighbour.h = heuristicEuclidean(neighbour, grid[end[0][0]][end[0][1]]);
+        else if(!(heuristic) && !(diagnol))
+          neighbour.h = heuristicManhattan(neighbour, grid[end[0][0]][end[0][1]]); //get heuristic value
+        else if(!(heuristic) && diagnol)
+          neighbour.h = heuristicDiagnol(neighbour, grid[end[0][0]][end[0][1]]);
         neighbour.isVisited = true;
         openList.push(neighbour);
         nodesVisited.push(neighbour);

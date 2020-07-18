@@ -21,13 +21,16 @@ function PathFinder() {
   const [sourcePressed, isSourcePressed] = useState(false);
   const [driftPressed, isDriftPressed] = useState(false);
   const [AstarSel, isAstarClicked] = useState(false);
+//mine
+  const [diagClicked,isDiagMovementClicked] = useState(false)
+  const [euclidClicked, isEuclidianClicked] = useState(false)
+  const [chebyshevClicked, isChebyshevClicked] = useState(false)
+  //mine
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
   var ncol = Math.floor(window.screen.availWidth / 25) - 1;
-  console.log(ncol);
-
   for (let i = 0; i < 22; i++) {
     var rows = [];
     for (let j = 0; j < ncol; j++) {
@@ -75,7 +78,8 @@ function PathFinder() {
     var ends = retEnds();
     var temp;
     if (AstarSel) {
-      temp = AStar(grid, start, ends);
+      console.log("1")
+      temp = AStar(grid, start, ends,diagClicked,euclidClicked,chebyshevClicked);
       path = temp.path.reverse();
     } else {
       temp = Dijikstra(grid, start, ends, allDrifts);
@@ -263,7 +267,11 @@ function PathFinder() {
       div2.style.display = "none";
     }
   }
-
+  function heuristicChebyshevClicked(bool)
+  {
+    isEuclidianClicked(false);
+    isChebyshevClicked(bool);
+  }
   function OnMouseUp(cell) {
     var newCells = grid.slice();
     if (source) {
@@ -505,19 +513,32 @@ function PathFinder() {
             <Nav.Link onClick={addEnds}>Add destination</Nav.Link>
             <Nav.Link onClick={addDrift}>Add Drifts</Nav.Link>
             <NavDropdown title="Algorithms" id="basic-nav-dropdown">
-              <NavDropdown.Item onClick={() => isAstarClicked(false)}>
-                Dijikstra
-              </NavDropdown.Item>
-              <NavDropdown.Item onClick={() => isAstarClicked(true)}>
-                A Star
-              </NavDropdown.Item>
-            </NavDropdown>
+                <NavDropdown drop="right" classname="Dropdownmenuclass" title="Dijikstra" id="basic-nav-dropdown" onClick={() => isAstarClicked(false)}>
+                    <NavDropdown.Header variant="dark">OPTIONS</NavDropdown.Header>
+                      <NavDropdown.Item onClick={() => isDiagMovementClicked(true)}>WithDiagnolMovements</NavDropdown.Item>
+                      <NavDropdown.Item onClick={() => isDiagMovementClicked(false)}>WithoutDiagnolMovements</NavDropdown.Item>
+                </NavDropdown>
+                <NavDropdown drop="right" classname="Dropdownmenuclass" title="A Star" id="basic-nav-dropdown" onClick={() => isAstarClicked(true)}>
+                    <NavDropdown.Header variant="dark">OPTIONS</NavDropdown.Header>
+                        <NavDropdown drop="right" classname="Dropdownmenuclass" title="WithDiagnolMovements" id="basic-nav-dropdown" onClick={() => isDiagMovementClicked(true)}>
+                            <NavDropdown.Header variant="dark">HEURISTICS</NavDropdown.Header>
+                              <NavDropdown.Item  onClick={() => isEuclidianClicked(true)}>EUCLIDIAN</NavDropdown.Item>
+                              <NavDropdown.Item onClick={() => heuristicChebyshevClicked(true)}>CHEBYSHEV</NavDropdown.Item>
+                              <NavDropdown.Item onClick={() => heuristicChebyshevClicked(false)}>OCTILE</NavDropdown.Item>
+                        </NavDropdown>
+                        <NavDropdown drop="right" classname="Dropdownmenuclass" title="WithoutDiagnolMovements" id="basic-nav-dropdown" onClick={() => isDiagMovementClicked(false)}>
+                            <NavDropdown.Header variant="dark">HEURISTICS</NavDropdown.Header>
+                              <NavDropdown.Item onClick={() => isEuclidianClicked(false)}>MANHATTAN</NavDropdown.Item>
+                              <NavDropdown.Item onClick={() => isEuclidianClicked(true)}>EUCLIDIAN</NavDropdown.Item>
+                        </NavDropdown>
+                </NavDropdown>
+                </NavDropdown>
             <Nav.Link onClick={popup}>Description</Nav.Link>
           </Nav>
           <Nav>
             <Nav.Link onClick={addRandomWalls}>Add Random Walls</Nav.Link>
             <Nav.Link onClick={reset}>Reset Grid</Nav.Link>
-            <Button onClick={main} variant="success">
+            <Button onClick={main} variant="outline-success">
               Start Search
             </Button>
           </Nav>
