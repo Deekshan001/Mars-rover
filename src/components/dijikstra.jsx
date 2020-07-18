@@ -37,6 +37,7 @@ function Diji1stra(cells, start, ends, allDrifts,option) {
   var no_of_adjacent;
   var dx;
   var dy;
+  var n=0;
   for (let i = 0; i < start.length; i++) {
     cur = cells[start[i][0]][start[i][1]];
     cur.distance = 0;
@@ -115,7 +116,15 @@ function Diji1stra(cells, start, ends, allDrifts,option) {
         gridreset(cells);
         var refEnd = new Date();
         refTime += refEnd - refStart;
+        if (path[n] != null) {
+          var x = [path[n].row, path[n].col];
+          n = path.length - 1;
 
+          for (let j = 0; j < start.length; j++) {
+            if (x[0] == start[j][0] && x[1] == start[j][1]) start.splice(j, 1);
+            else cells[start[j][0]][start[j][1]].distance = 0;
+          }
+        }
         cur.isVisited = true;
         cur.distance = 0;
       }
