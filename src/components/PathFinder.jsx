@@ -21,10 +21,10 @@ function PathFinder() {
   const [sourcePressed, isSourcePressed] = useState(false);
   const [driftPressed, isDriftPressed] = useState(false);
   const [AstarSel, isAstarClicked] = useState(false);
-//mine
-  const [diagClicked,isDiagMovementClicked] = useState(false)
-  const [euclidClicked, isEuclidianClicked] = useState(false)
-  const [chebyshevClicked, isChebyshevClicked] = useState(false)
+  //mine
+  const [diagClicked, isDiagMovementClicked] = useState(false);
+  const [euclidClicked, isEuclidianClicked] = useState(false);
+  const [chebyshevClicked, isChebyshevClicked] = useState(false);
   //mine
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -78,11 +78,18 @@ function PathFinder() {
     var ends = retEnds();
     var temp;
     if (AstarSel) {
-      console.log("1")
-      temp = AStar(grid, start, ends,diagClicked,euclidClicked,chebyshevClicked);
+      console.log("1");
+      temp = AStar(
+        grid,
+        start,
+        ends,
+        diagClicked,
+        euclidClicked,
+        chebyshevClicked
+      );
       path = temp.path.reverse();
     } else {
-      temp = Dijikstra(grid, start, ends, allDrifts,diagClicked);
+      temp = Dijikstra(grid, start, ends, allDrifts, diagClicked);
       path = temp.path;
     }
 
@@ -267,8 +274,7 @@ function PathFinder() {
       div2.style.display = "none";
     }
   }
-  function heuristicChebyshevClicked(bool)
-  {
+  function heuristicChebyshevClicked(bool) {
     isEuclidianClicked(false);
     isChebyshevClicked(bool);
   }
@@ -513,26 +519,72 @@ function PathFinder() {
             <Nav.Link onClick={addEnds}>Add destination</Nav.Link>
             <Nav.Link onClick={addDrift}>Add Drifts</Nav.Link>
             <NavDropdown title="Algorithms" id="basic-nav-dropdown">
-                <NavDropdown drop="right" classname="Dropdownmenuclass" title="Dijikstra" id="basic-nav-dropdown" onClick={() => isAstarClicked(false)}>
-                    <NavDropdown.Header variant="dark">OPTIONS</NavDropdown.Header>
-                      <NavDropdown.Item onClick={() => isDiagMovementClicked(true)}>WithDiagonolMovements</NavDropdown.Item>
-                      <NavDropdown.Item onClick={() => isDiagMovementClicked(false)}>WithoutDiagonolMovements</NavDropdown.Item>
+              <NavDropdown
+                drop="right"
+                classname="Dropdownmenuclass"
+                title="Dijikstra"
+                id="basic-nav-dropdown"
+                onClick={() => isAstarClicked(false)}
+              >
+                <NavDropdown.Header variant="dark">OPTIONS</NavDropdown.Header>
+                <NavDropdown.Item onClick={() => isDiagMovementClicked(true)}>
+                  With Diagonal Movements
+                </NavDropdown.Item>
+                <NavDropdown.Item onClick={() => isDiagMovementClicked(false)}>
+                  Without Diagonal Movements
+                </NavDropdown.Item>
+              </NavDropdown>
+              <NavDropdown
+                drop="right"
+                classname="Dropdownmenuclass"
+                title="A Star"
+                id="basic-nav-dropdown"
+                onClick={() => isAstarClicked(true)}
+              >
+                <NavDropdown.Header variant="dark">OPTIONS</NavDropdown.Header>
+                <NavDropdown
+                  drop="right"
+                  classname="Dropdownmenuclass"
+                  title="With Diagonal Movements"
+                  id="basic-nav-dropdown"
+                  onClick={() => isDiagMovementClicked(true)}
+                >
+                  <NavDropdown.Header variant="dark">
+                    HEURISTICS
+                  </NavDropdown.Header>
+                  <NavDropdown.Item onClick={() => isEuclidianClicked(true)}>
+                    EUCLIDIAN
+                  </NavDropdown.Item>
+                  <NavDropdown.Item
+                    onClick={() => heuristicChebyshevClicked(true)}
+                  >
+                    CHEBYSHEV
+                  </NavDropdown.Item>
+                  <NavDropdown.Item
+                    onClick={() => heuristicChebyshevClicked(false)}
+                  >
+                    OCTILE
+                  </NavDropdown.Item>
                 </NavDropdown>
-                <NavDropdown drop="right" classname="Dropdownmenuclass" title="A Star" id="basic-nav-dropdown" onClick={() => isAstarClicked(true)}>
-                    <NavDropdown.Header variant="dark">OPTIONS</NavDropdown.Header>
-                        <NavDropdown drop="right" classname="Dropdownmenuclass" title="WithDiagonolMovements" id="basic-nav-dropdown" onClick={() => isDiagMovementClicked(true)}>
-                            <NavDropdown.Header variant="dark">HEURISTICS</NavDropdown.Header>
-                              <NavDropdown.Item  onClick={() => isEuclidianClicked(true)}>EUCLIDIAN</NavDropdown.Item>
-                              <NavDropdown.Item onClick={() => heuristicChebyshevClicked(true)}>CHEBYSHEV</NavDropdown.Item>
-                              <NavDropdown.Item onClick={() => heuristicChebyshevClicked(false)}>OCTILE</NavDropdown.Item>
-                        </NavDropdown>
-                        <NavDropdown drop="right" classname="Dropdownmenuclass" title="WithoutDiagonolMovements" id="basic-nav-dropdown" onClick={() => isDiagMovementClicked(false)}>
-                            <NavDropdown.Header variant="dark">HEURISTICS</NavDropdown.Header>
-                              <NavDropdown.Item onClick={() => isEuclidianClicked(false)}>MANHATTAN</NavDropdown.Item>
-                              <NavDropdown.Item onClick={() => isEuclidianClicked(true)}>EUCLIDIAN</NavDropdown.Item>
-                        </NavDropdown>
+                <NavDropdown
+                  drop="right"
+                  classname="Dropdownmenuclass"
+                  title="Without Diagonal Movements"
+                  id="basic-nav-dropdown"
+                  onClick={() => isDiagMovementClicked(false)}
+                >
+                  <NavDropdown.Header variant="dark">
+                    HEURISTICS
+                  </NavDropdown.Header>
+                  <NavDropdown.Item onClick={() => isEuclidianClicked(false)}>
+                    MANHATTAN
+                  </NavDropdown.Item>
+                  <NavDropdown.Item onClick={() => isEuclidianClicked(true)}>
+                    EUCLIDIAN
+                  </NavDropdown.Item>
                 </NavDropdown>
-                </NavDropdown>
+              </NavDropdown>
+            </NavDropdown>
             <Nav.Link onClick={popup}>Description</Nav.Link>
           </Nav>
           <Nav>
