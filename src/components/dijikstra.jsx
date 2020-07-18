@@ -26,7 +26,7 @@ function gridreset(cells) {
   }
 }
 
-function Dijikstra(cells, start, ends, allDrifts) {
+function Diji1stra(cells, start, ends, allDrifts,option) {
   var StartTime = new Date();
   var cur = null;
   var nodesVisited = [];
@@ -34,8 +34,9 @@ function Dijikstra(cells, start, ends, allDrifts) {
   var refTime = 0;
   var path = [];
   var changeEnds = [];
-  var n = 0;
-
+  var no_of_adjacent;
+  var dx;
+  var dy;
   for (let i = 0; i < start.length; i++) {
     cur = cells[start[i][0]][start[i][1]];
     cur.distance = 0;
@@ -43,11 +44,21 @@ function Dijikstra(cells, start, ends, allDrifts) {
   }
   nodesVisited.push(cells[start[0][0]][start[0][1]]);
   cells[start[0][0]][start[0][1]].isVisited = true;
-  var dx = [-1, 1, 0, 0];
-  var dy = [0, 0, -1, 1];
-
+//option
+    if(option===false)
+    {
+      dx = [-1, 1, 0, 0];
+      dy = [0, 0, -1, 1];
+      no_of_adjacent=4;
+    }
+    else
+    {
+      dx = [-1, 1, 0, 0,-1,-1, 1, 1];
+      dy = [0, 0, -1, 1,-1, 1,-1, 1];
+      no_of_adjacent=8;
+    }
   while (cur !== null) {
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < no_of_adjacent; i++) {
       var x = cur.row + dx[i];
       var y = cur.col + dy[i];
       var d = cur.distance + 1;
@@ -69,7 +80,7 @@ function Dijikstra(cells, start, ends, allDrifts) {
             c1 = cells[r][c];
           }
 
-          for (let i = 0; i < 4; i++) {
+          for (let i = 0; i < no_of_adjacent; i++) {
             var x1 = r + dx[i];
             var y1 = c + dy[i];
             if (isSafe(x1, y1, cells)) {
@@ -88,6 +99,7 @@ function Dijikstra(cells, start, ends, allDrifts) {
       }
     }
 
+
     cur = getNextNode(cells);
     if (cur !== null) {
       cur.isVisited = true;
@@ -97,21 +109,12 @@ function Dijikstra(cells, start, ends, allDrifts) {
         remainingEnds -= 1;
         cur.isFinish = false;
         changeEnds.push(cur);
-        path = path.concat(crawlBack(cur).reverse());
+        path = path.concat(crawlBac1(cur).reverse());
+
         var refStart = new Date();
         gridreset(cells);
         var refEnd = new Date();
         refTime += refEnd - refStart;
-        console.log(path[n]);
-        if (path[n] != null) {
-          var x = [path[n].row, path[n].col];
-          n = path.length - 1;
-
-          for (let j = 0; j < start.length; j++) {
-            if (x[0] == start[j][0] && x[1] == start[j][1]) start.splice(j, 1);
-            else cells[start[j][0]][start[j][1]].distance = 0;
-          }
-        }
 
         cur.isVisited = true;
         cur.distance = 0;
@@ -136,14 +139,14 @@ function Dijikstra(cells, start, ends, allDrifts) {
   return { diff, path, nodesVisited };
 }
 
-function crawlBack(cur) {
-  var crawlBack = [];
-  crawlBack.push(cur);
+function crawlBac1(cur) {
+  var crawlBac1 = [];
+  crawlBac1.push(cur);
   while (cur !== null) {
     cur = cur.parent;
-    if (cur !== null) crawlBack.push(cur);
+    if (cur !== null) crawlBac1.push(cur);
   }
-  return crawlBack;
+  return crawlBac1;
 }
 
-export default Dijikstra;
+export default Diji1stra;
