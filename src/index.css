@@ -40,10 +40,12 @@ code {
 
 .start-cell {
   background-color: #bac964;
+  background-image: url("./images/mars_rover2.jpg");
 }
 
 .end-cell {
   background-color: #a6b1e1;
+  background-image: url("./images/dest.jpg");
 }
 
 .intermediate-cell {
