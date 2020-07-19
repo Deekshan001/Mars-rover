@@ -257,7 +257,6 @@ code {
 
 .nav-link {
   position: relative;
-  letter-spacing: 0.1em;
 }
 .nav-link:focus {
   font-weight: bold;
