@@ -4,6 +4,8 @@ import Dijikstra from "./dijikstra.jsx";
 import AStar from "./AStar.js";
 import { Button, Modal, Nav, NavDropdown } from "react-bootstrap";
 import Navbar from "react-bootstrap/Navbar";
+import algo from "./drop_down1.jpg";
+import algo2 from "./drop_down2.jpg";
 
 var source = false;
 var destination = false;
@@ -446,9 +448,12 @@ function PathFinder() {
           <section>
             <p>Use the navbar buttons to visualize algorithms</p>
             <p className="secP">
-              You can addWalls,addRandomWalls, addDrifts , reset the entire
-              board, choose algorithms all from the navbar. If you want to
-              access this description again, click on "Description".
+              Wall obstacles are impenetrable, i.e., paths cannot cross through
+              them. Drifts are....., You can addWalls,addRandomWalls, addDrifts
+              , reset the entire board, choose diffenent algorithms, all from
+              the navbar. If you want to access this description again, click on
+              "Description". Access the source code{" "}
+              <a href="https://github.com/Deekshan001/Mars-rover">here</a>
             </p>
           </section>
           <footer display="grid">
@@ -481,7 +486,17 @@ function PathFinder() {
         <div className="list2">
           <header align="center">Picking an Algorithm</header>
           <section>
-            <p>Choose an algorithm from the "Algorithms" drop-down menu.</p>
+            <p className="secP">
+              Choose an algorithm from the "Algorithms" drop-down menu. You can
+              visualize Dijkstra's Algorithm and A star search both with or
+              without diagonal movements options.
+            </p>
+            <p className="secP">
+              You can add multiple sources and destinations but can visualize
+              only with Dijkstra's algorthim.
+              <img src={algo}></img>
+              <img src={algo2}></img>
+            </p>
           </section>
           <footer display="grid">
             <button
