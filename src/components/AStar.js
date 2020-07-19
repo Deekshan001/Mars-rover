@@ -16,7 +16,7 @@ function initialize(grid) {
 
 //check if node is safe
 function isSafe(x, y, cells) {
-  if (x >= 0 && y >= 0 && x < 22 && y < (Math.floor(window.screen.availWidth / 25) - 1) && cells[x][y].isWall === false)
+  if (x >= 0 && y >= 0 && x < Math.floor((window.screen.availHeight -175) / 25) - 1 && y < (Math.floor(window.screen.availWidth / 25) - 1) && cells[x][y].isWall === false)
     return true;
   else return false;
 }

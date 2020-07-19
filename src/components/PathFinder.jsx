@@ -6,6 +6,13 @@ import { Button, Modal, Nav, NavDropdown } from "react-bootstrap";
 import Navbar from "react-bootstrap/Navbar";
 import algo from "./drop_down1.jpg";
 import algo2 from "./drop_down2.jpg";
+import startNode from "./images/start.jpg"
+import wallNode from "./images/blacknode.jpg"
+import endNode from "./images/dest.jpg"
+import pathNode from "./images/pathNode.jpg"
+import visitedNode from "./images/visitedNode.jpg"
+import driftNode from "./images/driftNode.jpg"
+import wallsgif from "./images/Walls.gif"
 
 var source = false;
 var destination = false;
@@ -33,7 +40,8 @@ function PathFinder() {
   const handleShow = () => setShow(true);
 
   var ncol = Math.floor(window.screen.availWidth / 25) - 1;
-  for (let i = 0; i < 22; i++) {
+  var nrow = Math.floor((window.screen.availHeight -175) / 25) - 1;
+  for (let i = 0; i < nrow; i++) {
     var rows = [];
     for (let j = 0; j < ncol; j++) {
       var cur = {
@@ -195,13 +203,13 @@ function PathFinder() {
     var col;
     var i;
     var j;
-    for (i = 0; i < 22; i++) {
+    for (i = 0; i < nrow; i++) {
       for (j = 0; j < ncol; j++) {
         grid[i][j].isWall = false;
       }
     }
     for (i = 0; i < 100; i++) {
-      row = Math.floor(Math.random() * (22 - 0));
+      row = Math.floor(Math.random() * (nrow - 0));
       col = Math.floor(Math.random() * (ncol - 0));
       if (!grid[row][col].isStart && !grid[row][col].isFinish) {
         newCells[row][col] = { isWall: true };
@@ -236,13 +244,6 @@ function PathFinder() {
       for (var i = 0; i < div1.length; i++) div1[i].style.display = "none";
     } else if (page === "first" && action === "next") {
       const div1 = document.querySelector("#secondpage");
-      const ul = document.querySelector("#secondul");
-      ul.children[1].style.background = "#a6b1e1";
-      ul.children[2].style.background = "black";
-      ul.children[3].style.background = "";
-      ul.children[4].style.background = "#6b0d0d";
-      ul.children[4].style.border = "2px dashed brown";
-      ul.children[5].style.background = "#dcd6f7";
       const div2 = document.querySelector("#firstpage");
       div1.style.display = "block";
       div2.style.display = "none";
@@ -266,15 +267,60 @@ function PathFinder() {
       const div2 = document.querySelector("#thirdpage");
       div1.style.display = "block";
       div2.style.display = "none";
-    } else if (page == "fourth" && action == "finish") {
-      const div1 = document.querySelector("#fourthpage");
-      div1.style.display = "none";
+    } else if (page == "fourth" && action == "next") {
+      const div1 = document.querySelector("#fifthpage");
+      const div2 = document.querySelector("#fourthpage");
+      div1.style.display = "block";
+      div2.style.display = "none";
     } else if (page === "fourth" && action === "previous") {
       const div1 = document.querySelector("#thirdpage");
       const div2 = document.querySelector("#fourthpage");
       div1.style.display = "block";
       div2.style.display = "none";
     }
+    else if (page == "fifth" && action == "next") {
+      const div1 = document.querySelector("#sixthpage");
+      const div2 = document.querySelector("#fifthpage");
+      div1.style.display = "block";
+      div2.style.display = "none";
+    } else if (page === "fifth" && action === "previous") {
+      const div1 = document.querySelector("#fourthpage");
+      const div2 = document.querySelector("#fifthpage");
+      div1.style.display = "block";
+      div2.style.display = "none";
+    }
+    else if (page == "sixth" && action == "next") {
+      const div1 = document.querySelector("#seventhpage");
+      const div2 = document.querySelector("#sixthpage");
+      div1.style.display = "block";
+      div2.style.display = "none";
+    } else if (page === "sixth" && action === "previous") {
+      const div1 = document.querySelector("#fifthpage");
+      const div2 = document.querySelector("#sixthpage");
+      div1.style.display = "block";
+      div2.style.display = "none";
+    }
+    else if (page == "seventh" && action == "next") {
+      const div1 = document.querySelector("#eighthpage");
+      const div2 = document.querySelector("#seventhpage");
+      div1.style.display = "block";
+      div2.style.display = "none";
+    } else if (page === "seventh" && action === "previous") {
+      const div1 = document.querySelector("#sixthpage");
+      const div2 = document.querySelector("#seventhpage");
+      div1.style.display = "block";
+      div2.style.display = "none";
+    }
+    else if (page == "eighth" && action == "finish") {
+      const div1 = document.querySelector("#eighthpage");
+      div1.style.display = "none";
+    } else if (page === "eighth" && action === "previous") {
+      const div1 = document.querySelector("#seventhpage");
+      const div2 = document.querySelector("#eighthpage");
+      div1.style.display = "block";
+      div2.style.display = "none";
+    }
+
   }
   function heuristicChebyshevClicked(bool) {
     isEuclidianClicked(false);
@@ -408,12 +454,12 @@ function PathFinder() {
               a node to another have a "cost" of 1.
             </p>
             <ul id="secondul">
-              <li>StartNode</li>
-              <li>EndNode</li>
-              <li>WallNode</li>
-              <li>DriftNode</li>
-              <li>VisitedNode</li>
-              <li>PathNode</li>
+              <li><img src={startNode} width="30px" height="30px"></img>  StartNode</li>
+              <li><img src={endNode} width="30px" height="30px"></img>  destinNode</li>
+              <li><img src={wallNode} width="30px" height="30px"></img>  WallNode</li>
+              <li><img src={driftNode} width="30px" height="30px"></img>  DriftNode</li>
+              <li><img src={visitedNode} width="30px" height="30px"></img> VisitedNode</li>
+              <li><img src={pathNode} width="30px" height="30px"></img>  PathNode</li>
             </ul>
           </section>
           <footer display="grid">
@@ -442,87 +488,251 @@ function PathFinder() {
         </div>
       </div>
 
-      <div className="contain2" id="fourthpage">
-        <div className="list2">
-          <header align="center">Visualizing and more</header>
-          <section>
-            <p>Use the navbar buttons to visualize algorithms</p>
-            <p className="secP">
-              Wall obstacles are impenetrable, i.e., paths cannot cross through
-              them. Drifts are....., You can addWalls,addRandomWalls, addDrifts
-              , reset the entire board, choose diffenent algorithms, all from
-              the navbar. If you want to access this description again, click on
-              "Description". Access the source code{" "}
-              <a href="https://github.com/Deekshan001/Mars-rover">here</a>
-            </p>
-          </section>
-          <footer display="grid">
-            <button
-              className="btn btn-outline-light"
-              type="button"
-              onClick={() => actioPerformed("fourthpage", "skip")}
-            >
-              Skip Description
-            </button>
-            <button
-              className="btn btn-outline-light"
-              type="button"
-              onClick={() => actioPerformed("fourth", "previous")}
-            >
-              Previous
-            </button>
-            <button
-              className="btn btn-outline-light"
-              type="button"
-              onClick={() => actioPerformed("fourth", "finish")}
-            >
-              Finish
-            </button>
-          </footer>
-        </div>
-      </div>
 
-      <div className="contain2" id="thirdpage">
-        <div className="list2">
-          <header align="center">Picking an Algorithm</header>
-          <section>
-            <p className="secP">
-              Choose an algorithm from the "Algorithms" drop-down menu. You can
-              visualize Dijkstra's Algorithm and A star search both with or
-              without diagonal movements options.
-            </p>
-            <p className="secP">
-              You can add multiple sources and destinations but can visualize
-              only with Dijkstra's algorthim.
-              <img src={algo}></img>
-              <img src={algo2}></img>
-            </p>
-          </section>
-          <footer display="grid">
-            <button
-              className="btn btn-outline-light"
-              type="button"
-              onClick={() => actioPerformed("thirdpage", "skip")}
-            >
-              Skip Description
-            </button>
-            <button
-              className="btn btn-outline-light"
-              type="button"
-              onClick={() => actioPerformed("third", "previous")}
-            >
-              Previous
-            </button>
-            <button
-              className="btn btn-outline-light"
-              type="button"
-              onClick={() => actioPerformed("third", "next")}
-            >
-              Next
-            </button>
-          </footer>
-        </div>
-      </div>
+
+  <div className="contain2" id="thirdpage">
+    <div className="list2">
+      <header align="center">Add Random Walls</header>
+      <section>
+        <p className="secP">
+          On clicking the option "Add Random Walls" from NavBar, there <strong>arises
+          walls at random positions</strong> of the grid.
+        </p>
+        <p className="secP">
+          You can add multiple sources and destinations but can visualize
+          only with Dijkstra's algorthim.
+          <img src={algo}></img>
+          <img src={algo2}></img>
+        </p>
+      </section>
+      <footer display="grid">
+        <button
+          className="btn btn-outline-light"
+          type="button"
+          onClick={() => actioPerformed("thirdpage", "skip")}
+        >
+          Skip Description
+        </button>
+        <button
+          className="btn btn-outline-light"
+          type="button"
+          onClick={() => actioPerformed("third", "previous")}
+        >
+          Previous
+        </button>
+        <button
+          className="btn btn-outline-light"
+          type="button"
+          onClick={() => actioPerformed("third", "next")}
+        >
+          Next
+        </button>
+      </footer>
+    </div>
+  </div>
+
+  <div className="contain2" id="fourthpage">
+    <div className="list2">
+      <header align="center">Add Walls</header>
+      <section>
+        <p className="secP">
+          On clicking the option "Add Walls" from NavBar. Click and drag to add walls
+          on the grid.
+        </p>
+        <p className="secP">
+          <img src={wallsgif}></img>
+        </p>
+      </section>
+      <footer display="grid">
+        <button
+          className="btn btn-outline-light"
+          type="button"
+          onClick={() => actioPerformed("fourthpage", "skip")}
+        >
+          Skip Description
+        </button>
+        <button
+          className="btn btn-outline-light"
+          type="button"
+          onClick={() => actioPerformed("fourth", "previous")}
+        >
+          Previous
+        </button>
+        <button
+          className="btn btn-outline-light"
+          type="button"
+          onClick={() => actioPerformed("fourth", "next")}
+        >
+          Next
+        </button>
+      </footer>
+    </div>
+  </div>
+
+  <div className="contain2" id="fifthpage">
+    <div className="list2">
+      <header align="center">Add Source / Add Destination</header>
+      <section>
+        <p className="secP">
+          On clicking the option "Add Source" or "Add Destination" from NavBar. Click and drag to add Source or Destination
+          on the grid.
+        </p>
+        <p className="secP">
+          <img src={algo2}></img>
+        </p>
+      </section>
+      <footer display="grid">
+        <button
+          className="btn btn-outline-light"
+          type="button"
+          onClick={() => actioPerformed("fifthpage", "skip")}
+        >
+          Skip Description
+        </button>
+        <button
+          className="btn btn-outline-light"
+          type="button"
+          onClick={() => actioPerformed("fifth", "previous")}
+        >
+          Previous
+        </button>
+        <button
+          className="btn btn-outline-light"
+          type="button"
+          onClick={() => actioPerformed("fifth", "next")}
+        >
+          Next
+        </button>
+      </footer>
+    </div>
+  </div>
+
+  <div className="contain2" id="sixthpage">
+    <div className="list2">
+      <header align="center">Add Drift</header>
+      <section>
+        <p className="secP">
+          On clicking the option "Add Drift". Click and drag to add drift
+          on the grid.
+        </p>
+        <p className="secP">
+  //  Description of Add frift
+          <p>
+
+          </p>
+          <img src={algo2}></img>
+        </p>
+      </section>
+      <footer display="grid">
+        <button
+          className="btn btn-outline-light"
+          type="button"
+          onClick={() => actioPerformed("sixthpage", "skip")}
+        >
+          Skip Description
+        </button>
+        <button
+          className="btn btn-outline-light"
+          type="button"
+          onClick={() => actioPerformed("sixth", "previous")}
+        >
+          Previous
+        </button>
+        <button
+          className="btn btn-outline-light"
+          type="button"
+          onClick={() => actioPerformed("sixth", "next")}
+        >
+          Next
+        </button>
+      </footer>
+    </div>
+  </div>
+  <div className="contain2" id="seventhpage">
+    <div className="list2">
+      <header align="center">Picking an Algorithm</header>
+      <section>
+        <p className="secP">
+          Choose an algorithm from the "Algorithms" drop-down menu. You can
+          visualize Dijkstra's Algorithm and A star search both with or
+          without diagonal movements options.
+        </p>
+        <p className="secP">
+          You can add multiple sources and destinations but can visualize
+          only with Dijkstra's algorthim.
+          <img src={algo}></img>
+          <img src={algo2}></img>
+        </p>
+      </section>
+      <footer display="grid">
+        <button
+          className="btn btn-outline-light"
+          type="button"
+          onClick={() => actioPerformed("seventhpage", "skip")}
+        >
+          Skip Description
+        </button>
+        <button
+          className="btn btn-outline-light"
+          type="button"
+          onClick={() => actioPerformed("seventh", "previous")}
+        >
+          Previous
+        </button>
+        <button
+          className="btn btn-outline-light"
+          type="button"
+          onClick={() => actioPerformed("seventh", "next")}
+        >
+          Next
+        </button>
+      </footer>
+    </div>
+  </div>
+
+  <div className="contain2" id="eighthpage">
+    <div className="list2">
+      <header align="center">Visualizing and more</header>
+      <section>
+        <p>Use the navbar buttons to visualize algorithms</p>
+        <p className="secP">
+          Wall obstacles are impenetrable, i.e., paths cannot cross through
+          them. Drifts are....., You can addWalls,addRandomWalls, addDrifts
+          , reset the entire board, choose diffenent algorithms, all from
+          the navbar. If you want to access this description again, click on
+          "Description". Access the source code{" "}
+          <a href="https://github.com/Deekshan001/Mars-rover">here</a>
+        </p>
+      </section>
+      <footer display="grid">
+        <button
+          className="btn btn-outline-light"
+          type="button"
+          onClick={() => actioPerformed("eighthpage", "skip")}
+        >
+          Skip Description
+        </button>
+        <button
+          className="btn btn-outline-light"
+          type="button"
+          onClick={() => actioPerformed("eighth", "previous")}
+        >
+          Previous
+        </button>
+        <button
+          className="btn btn-outline-light"
+          type="button"
+          onClick={() => actioPerformed("eighth", "finish")}
+        >
+          Finish
+        </button>
+      </footer>
+    </div>
+  </div>
+
+
+
+
 
       <Navbar className="nav-bar" variant="dark" expand="lg">
         <Navbar.Brand>Path Finder</Navbar.Brand>

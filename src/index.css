@@ -229,14 +229,29 @@ code {
 #fourthpage {
   display: none;
 }
+#fifthpage {
+  display: none;
+}
+
+#sixthpage {
+  display: none;
+}
+
+#seventhpage {
+  display: none;
+}
+#eighthpage {
+  display: none;
+}
 
 #secondpage .list2 section ul {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-column-gap: 0.75em;
-  grid-row-gap: 0.5em;
-  width: 80%;
+  grid-row-gap: 0.75em;
+  text-align: center;
   vertical-align: middle;
+
 }
 
 #secondpage .list2 section ul li {
@@ -244,7 +259,7 @@ code {
   font-size: 18px;
   height: 30px;
   padding-bottom: 20px;
-  background: #bac964;
+  margin-bottom: 20px;
   border-radius: 6px;
   text-align: center;
 
