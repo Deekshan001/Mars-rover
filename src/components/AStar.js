@@ -108,10 +108,10 @@ function crawlBack(cur) {
 
 //a* algorithm
 function AStar(grid, start, end, diagnol, heuristic,heuristic2) {
-  console.log("1");
   var startDate = new Date();
   initialize(grid);
   var openList = [];
+  var path = [];
   var nodesVisited = [];
   openList.push(grid[start[0][0]][start[0][1]]);
   while (openList.length > 0) {
@@ -129,7 +129,7 @@ function AStar(grid, start, end, diagnol, heuristic,heuristic2) {
       curr.isVisited = true;
       grid[curr.row][curr.col] = curr;
       var cur = curr;
-      var path = [];
+
       while (cur.parent) {
         path.push(cur);
         cur = cur.parent;
@@ -139,7 +139,6 @@ function AStar(grid, start, end, diagnol, heuristic,heuristic2) {
       var diff = Math.abs(startDate - endDate);
       return { path, nodesVisited, diff }; //retrace path
     }
-    console.log("diagnol choosen 0")
     //case 2:normal case - remove node from open and mark as close, and process its neighbours
     remove(openList, curr);
     nodesVisited.push(curr);
@@ -147,20 +146,18 @@ function AStar(grid, start, end, diagnol, heuristic,heuristic2) {
     grid[curr.row][curr.col] = curr;
     if(!diagnol)
     {
-      console.log("diagnol choosen")
       var neighbours = getNeighbours(grid, curr); //get list of neighbours
     }
     else {
-      console.log("diagnol choosen")
       var neighbours = getNeighboursDiagnol(grid, curr);
     }
+    var flag=0;
     for (i = 0; i < neighbours.length; i++) {
       var neighbour = neighbours[i]; //for each neighbour
       if (neighbour.closed || neighbour.isWall) {
         //not a valid node
         continue;
       }
-
       //g is shortest distance from start to current node
       var gValue = curr.g + 1; //1 is distance from node to neighbour
       var IsBestgValue = false;
@@ -188,5 +185,10 @@ function AStar(grid, start, end, diagnol, heuristic,heuristic2) {
       grid[neighbour.row][neighbour.col] = neighbour;
     }
   }
+  var endDate = new Date();
+  var diff = Math.abs(startDate - endDate);
+  path.push(null)
+  return { path, nodesVisited, diff }; //ret
+
 }
 export default AStar;

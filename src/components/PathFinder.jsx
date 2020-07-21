@@ -327,7 +327,7 @@ function PathFinder() {
   function OnMouseUp(cell) {
     var newCells = grid.slice();
     if (source) {
-      newCells[cell.row][cell.col] = { ...cell, isStart: true, isWall: false };
+      newCells[cell.row][cell.col] = { ...cell, isStart: true, isWall: false};
       source = false;
     } else if (destination) {
       newCells[cell.row][cell.col] = { ...cell, isFinish: true, isWall: false };
