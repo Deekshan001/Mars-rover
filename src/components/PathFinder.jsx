@@ -19,6 +19,7 @@ import driftsGif from "./images/drifts.gif";
 
 var source = false;
 var destination = false;
+var walls=false;
 var time = 0;
 var pathLen = 0;
 var drifts = [];
@@ -215,8 +216,7 @@ function PathFinder() {
       row = Math.floor(Math.random() * (nrow - 0));
       col = Math.floor(Math.random() * (ncol - 0));
       if (!grid[row][col].isStart && !grid[row][col].isFinish) {
-        newCells[row][col] = { isWall: true };
-        makegrid(newCells);
+        grid[row][col].isWall = true;
       }
     }
   }
@@ -343,6 +343,8 @@ function PathFinder() {
       driftIndex += 1;
       drifts = [];
     }
+    else if(walls)
+    walls=false;
     makegrid(newCells);
     isMousePressed(false);
   }
@@ -371,7 +373,14 @@ function PathFinder() {
         isDrift: true,
         driftNo: driftIndex,
       };
-    } else newCells[cell.row][cell.col] = { ...cell, isWall: true };
+    } else if(cell.isWall)
+        {  newCells[cell.row][cell.col] = { ...cell, isWall: false};
+              walls=true;
+        }
+    else{
+
+      newCells[cell.row][cell.col] = { ...cell, isWall: true };
+    }
     makegrid(newCells);
     isMousePressed(true);
   }
@@ -394,7 +403,16 @@ function PathFinder() {
           isDrift: true,
           driftNo: driftIndex,
         };
-      } else
+      }
+      else if(walls)
+      {
+        newCells[cell.row][cell.col] = {
+          ...newCells[cell.row][cell.col],
+          isWall: false,
+        };
+      }
+      else
+      if(!cell.isStart && !cell.isFinish)
         newCells[cell.row][cell.col] = {
           ...newCells[cell.row][cell.col],
           isWall: true,
