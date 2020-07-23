@@ -3,8 +3,6 @@ function f1(props) {
   var {
     isStart,
     isFinish,
-    pathChange,
-    visChange,
     isWall,
     onMouseDown,
     onMouseEnter,
@@ -20,12 +18,8 @@ function f1(props) {
     ? "wall"
     : isDrift
     ? "drift"
-    : pathChange
-    ? "path-cell"
     : isStart
     ? "start-cell"
-    : visChange
-    ? "intermediate-cell"
     : "";
 
   return (
@@ -36,9 +30,7 @@ function f1(props) {
       onMouseEnter={() => onMouseEnter(cell)}
       onMouseUp={() => onMouseUp(cell)}
       onMouseLeave={() => onMouseLeave(cell)}
-    >
-      {pathChange && <hr />}
-    </div>
+    ></div>
   );
 }
 export default f1;

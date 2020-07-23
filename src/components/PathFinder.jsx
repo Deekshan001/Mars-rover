@@ -4,8 +4,9 @@ import Dijikstra from "./dijikstra.jsx";
 import AStar from "./AStar.js";
 import { Button, Modal, Nav, NavDropdown } from "react-bootstrap";
 import Navbar from "react-bootstrap/Navbar";
-import algo from "./drop_down1.jpg";
-import algo2 from "./drop_down2.jpg";
+
+//Images used
+import algo from "./images/algo.gif";
 import startNode from "./images/start.jpg";
 import wallNode from "./images/blacknode.jpg";
 import endNode from "./images/dest.jpg";
@@ -16,6 +17,7 @@ import wallsgif from "./images/Walls.gif";
 import randomWallsGif from "./images/randomwalls.gif";
 import srcDestGif from "./images/src-dest.gif";
 import driftsGif from "./images/drifts.gif";
+import logo from "../images/start.jpg";
 
 var source = false;
 var destination = false;
@@ -28,20 +30,24 @@ var path = [];
 var visited = [];
 function PathFinder() {
   var cells = [];
+  //Handle mouse activity
   const [mousePressed, isMousePressed] = useState(false);
   const [endPressed, isEndPressed] = useState(false);
   const [sourcePressed, isSourcePressed] = useState(false);
   const [driftPressed, isDriftPressed] = useState(false);
+
   const [AstarSel, isAstarClicked] = useState(false);
-  //mine
+
+  //Handle Heuristics
   const [diagClicked, isDiagMovementClicked] = useState(false);
   const [euclidClicked, isEuclidianClicked] = useState(false);
   const [chebyshevClicked, isChebyshevClicked] = useState(false);
-  //mine
+
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  //Initialize Grid
   var ncol = Math.floor(window.screen.availWidth / 25) - 1;
   var nrow = Math.floor((window.screen.availHeight - 175) / 25) - 1;
   for (let i = 0; i < nrow; i++) {
@@ -56,8 +62,6 @@ function PathFinder() {
         isVisited: false,
         isWall: false,
         parent: null,
-        pathChange: false,
-        visChange: false,
         isDrift: false,
         driftNo: 0,
       };
@@ -98,7 +102,8 @@ function PathFinder() {
         ends,
         diagClicked,
         euclidClicked,
-        chebyshevClicked
+        chebyshevClicked,
+        allDrifts
       );
       path = temp.path.reverse();
     } else {
@@ -117,7 +122,7 @@ function PathFinder() {
     for (let i = 0; i <= visited.length; i++) {
       if (i === visited.length) {
         setTimeout(() => {
-          if (path[0] == null) {
+          if (path[0] === null) {
             handleShow();
             return;
           }
@@ -138,7 +143,7 @@ function PathFinder() {
     for (let i = 0; i < path.length; i++) {
       setTimeout(() => {
         const node = path[i];
-        if (path[i] == null) {
+        if (path[i] === null) {
           handleShow();
           return;
         }
@@ -152,9 +157,8 @@ function PathFinder() {
     }
   }
 
+  //Problematic!!!
   function clearpaths() {
-    visited = [];
-    path = [];
     var newCells = grid.slice();
     for (let i = 0; i < newCells.length; i++)
       for (let j = 0; j < newCells[i].length; j++) {
@@ -182,25 +186,22 @@ function PathFinder() {
       }
     makegrid(newCells);
   }
-
   function main() {
-    clearpaths();
+    // clearpaths();
     visualize();
-  }
-  function addWalls() {
-    isEndPressed(false);
-    isSourcePressed(false);
   }
   function reset() {
     window.location.reload(false);
   }
+
   function setTimeandPathLen() {
     const list = document.querySelector(".list");
     list.children[0].innerHTML = "Time:" + time + "ms";
     list.children[1].innerHTML = "PathLen:" + pathLen;
   }
+
+  //Random Walls
   function addRandomWalls() {
-    clearpaths();
     var newCells = grid.slice();
     var row;
     var col;
@@ -220,14 +221,24 @@ function PathFinder() {
       }
     }
   }
+
+  //Handle each of the additions [Walls, Sources, Destinations, Drifts]
+  function addWalls() {
+    isEndPressed(false);
+    isSourcePressed(false);
+    isDriftPressed(false);
+  }
+
   function addEnds() {
     isEndPressed(true);
     isSourcePressed(false);
+    isDriftPressed(false);
   }
 
   function addSources() {
     isSourcePressed(true);
     isEndPressed(false);
+    isDriftPressed(false);
   }
 
   function addDrift() {
@@ -236,13 +247,14 @@ function PathFinder() {
     isEndPressed(false);
   }
 
+  //Description box
   function popup() {
     const div = document.querySelector("#firstpage");
     div.style.display = "block";
   }
+
   function actioPerformed(page, action) {
-    console.log("actioPerformed", page, action);
-    if (action == "skip") {
+    if (action === "skip") {
       const div1 = document.querySelectorAll(".contain2");
       for (var i = 0; i < div1.length; i++) div1[i].style.display = "none";
     } else if (page === "first" && action === "next") {
@@ -250,7 +262,7 @@ function PathFinder() {
       const div2 = document.querySelector("#firstpage");
       div1.style.display = "block";
       div2.style.display = "none";
-    } else if (page == "second" && action == "next") {
+    } else if (page === "second" && action === "next") {
       const div1 = document.querySelector("#thirdpage");
       const div2 = document.querySelector("#secondpage");
       div1.style.display = "block";
@@ -260,7 +272,7 @@ function PathFinder() {
       const div2 = document.querySelector("#secondpage");
       div1.style.display = "block";
       div2.style.display = "none";
-    } else if (page == "third" && action == "next") {
+    } else if (page === "third" && action === "next") {
       const div1 = document.querySelector("#fourthpage");
       const div2 = document.querySelector("#thirdpage");
       div1.style.display = "block";
@@ -270,7 +282,7 @@ function PathFinder() {
       const div2 = document.querySelector("#thirdpage");
       div1.style.display = "block";
       div2.style.display = "none";
-    } else if (page == "fourth" && action == "next") {
+    } else if (page === "fourth" && action === "next") {
       const div1 = document.querySelector("#fifthpage");
       const div2 = document.querySelector("#fourthpage");
       div1.style.display = "block";
@@ -280,7 +292,7 @@ function PathFinder() {
       const div2 = document.querySelector("#fourthpage");
       div1.style.display = "block";
       div2.style.display = "none";
-    } else if (page == "fifth" && action == "next") {
+    } else if (page === "fifth" && action === "next") {
       const div1 = document.querySelector("#sixthpage");
       const div2 = document.querySelector("#fifthpage");
       div1.style.display = "block";
@@ -290,7 +302,7 @@ function PathFinder() {
       const div2 = document.querySelector("#fifthpage");
       div1.style.display = "block";
       div2.style.display = "none";
-    } else if (page == "sixth" && action == "next") {
+    } else if (page === "sixth" && action === "next") {
       const div1 = document.querySelector("#seventhpage");
       const div2 = document.querySelector("#sixthpage");
       div1.style.display = "block";
@@ -300,7 +312,7 @@ function PathFinder() {
       const div2 = document.querySelector("#sixthpage");
       div1.style.display = "block";
       div2.style.display = "none";
-    } else if (page == "seventh" && action == "next") {
+    } else if (page === "seventh" && action === "next") {
       const div1 = document.querySelector("#eighthpage");
       const div2 = document.querySelector("#seventhpage");
       div1.style.display = "block";
@@ -310,7 +322,7 @@ function PathFinder() {
       const div2 = document.querySelector("#seventhpage");
       div1.style.display = "block";
       div2.style.display = "none";
-    } else if (page == "eighth" && action == "finish") {
+    } else if (page === "eighth" && action === "finish") {
       const div1 = document.querySelector("#eighthpage");
       div1.style.display = "none";
     } else if (page === "eighth" && action === "previous") {
@@ -320,20 +332,23 @@ function PathFinder() {
       div2.style.display = "none";
     }
   }
+
+  //Handle heuristic
   function heuristicChebyshevClicked(bool) {
     isEuclidianClicked(false);
     isChebyshevClicked(bool);
   }
+
+  //Mouse Handlers
   function OnMouseUp(cell) {
     var newCells = grid.slice();
     if (source) {
-      newCells[cell.row][cell.col] = { ...cell, isStart: true, isWall: false};
+      newCells[cell.row][cell.col] = { ...cell, isStart: true, isWall: false };
       source = false;
     } else if (destination) {
       newCells[cell.row][cell.col] = { ...cell, isFinish: true, isWall: false };
       destination = false;
     } else if (driftPressed) {
-      drifts.push(cell);
       newCells[cell.row][cell.col] = {
         ...cell,
         isDrift: true,
@@ -346,6 +361,7 @@ function PathFinder() {
     makegrid(newCells);
     isMousePressed(false);
   }
+
   function OnMouseLeave(cell) {
     var newCells = grid.slice();
     if (source) {
@@ -355,6 +371,7 @@ function PathFinder() {
     }
     makegrid(newCells);
   }
+
   function OnMouseDown(cell) {
     var newCells = grid.slice();
     if (endPressed) newCells[cell.row][cell.col] = { ...cell, isFinish: true };
@@ -377,7 +394,7 @@ function PathFinder() {
   }
 
   function OnMouseEnter(cell) {
-    if (mousePressed && cell.row != undefined) {
+    if (mousePressed && cell.row !== undefined) {
       var newCells = grid.slice();
       if (endPressed)
         newCells[cell.row][cell.col] = { ...cell, isFinish: true };
@@ -409,6 +426,8 @@ function PathFinder() {
         <li>Time:0</li>
         <li>PathLen:0</li>
       </ul>
+
+      {/* Description box */}
       <div className="contain2" id="firstpage">
         <div className="list2">
           <header align="center">Welcome to Mars Rover Path Finder</header>
@@ -419,7 +438,7 @@ function PathFinder() {
             </p>
             <p className="secP">
               If you want to dive right in, feel free to press the "Skip
-              Description" button below.Otherwise, press "Next"!
+              Description" button below. Otherwise, press "Next"!
             </p>
           </section>
           <footer display="grid">
@@ -430,9 +449,9 @@ function PathFinder() {
             >
               Skip Description
             </button>
-
+            <div width="50px"></div>
             <button
-              className="btn btn-outline-light float-right"
+              className="btn btn-outline-light float-right "
               type="button"
               onClick={() => actioPerformed("first", "next")}
             >
@@ -447,31 +466,49 @@ function PathFinder() {
           <header align="center">Important points to be noted</header>
           <section>
             <p>
-              All of the algorithms on this application are adapted for a 2D
+              All of the algorithms on this application are designed for a 2D
               grid, where 90 degree turns have a "cost" of 1 and movements from
               a node to another have a "cost" of 1.
             </p>
             <ul id="secondul">
               <li>
-                <img src={startNode} width="30px" height="30px"></img> Start
-                Node
+                <img
+                  alt="Start"
+                  src={startNode}
+                  width="30px"
+                  height="30px"
+                ></img>{" "}
+                Start Node
               </li>
               <li>
-                <img src={endNode} width="30px" height="30px"></img> Destination
+                <img alt="End" src={endNode} width="30px" height="30px"></img>{" "}
+                Destination
               </li>
               <li>
-                <img src={wallNode} width="30px" height="30px"></img> Wall Node
+                <img alt="Wall" src={wallNode} width="30px" height="30px"></img>{" "}
+                Wall Node
               </li>
               <li>
-                <img src={driftNode} width="30px" height="30px"></img> Drift
-                Node
+                <img
+                  alt="Drift"
+                  src={driftNode}
+                  width="30px"
+                  height="30px"
+                ></img>{" "}
+                Drift Node
               </li>
               <li>
-                <img src={visitedNode} width="30px" height="30px"></img> Visited
-                Node
+                <img
+                  alt="Visited"
+                  src={visitedNode}
+                  width="30px"
+                  height="30px"
+                ></img>{" "}
+                Visited Node
               </li>
               <li>
-                <img src={pathNode} width="30px" height="30px"></img> Path Node
+                <img alt="Path" src={pathNode} width="30px" height="30px"></img>{" "}
+                Path Node
               </li>
             </ul>
           </section>
@@ -508,7 +545,13 @@ function PathFinder() {
             <p className="secP">
               Clicking the option "Add Random Walls" from NavBar,{" "}
               <strong>results in walls at random positions</strong> of the grid.
-              <img src={randomWallsGif} width="530px" height="300px"></img>
+              <br />
+              <img
+                alt="walls"
+                src={randomWallsGif}
+                width="500px"
+                height="250px"
+              ></img>
             </p>
           </section>
           <footer display="grid">
@@ -542,12 +585,11 @@ function PathFinder() {
           <header align="center">Add Walls</header>
           <section>
             <p className="secP">
-              Wall obstacles are impenetrable, i.e., paths cannot cross through
+              Wall obstacles are impenetrable, i.e. paths cannot cross through
               them. Click on option "Add Walls" from NavBar then click and drag
               to add walls on the grid.
-            </p>
-            <p className="secP">
-              <img src={wallsgif}></img>
+              <br />
+              <img alt="walls" src={wallsgif}></img>
             </p>
           </section>
           <footer display="grid">
@@ -581,9 +623,9 @@ function PathFinder() {
           <header align="center">Add Source / Add Destination</header>
           <section>
             <p className="secP">
-              Click on option "Add Source" or "Add Destination" from NavBar then
-              click and drag to add Source or Destination on the grid.
-              <img src={srcDestGif} width="530px" height="200px"></img>
+              Click on option "Add Source" or "Add Destination" from NavBar,
+              then click and drag to add Source or Destination on the grid.
+              <img alt="" src={srcDestGif} width="500px" height="200px"></img>
             </p>
           </section>
           <footer display="grid">
@@ -618,8 +660,14 @@ function PathFinder() {
           <section>
             <p className="secP">
               On clicking the option "Add Drift". Click and drag to add drift on
-              the grid. // Description of Add drift
-              <img src={driftsGif} width="530px" height="300px"></img>
+              the grid. These are air columns where once a node enters the drift
+              it is pushed away to the end of the column.
+              <img
+                alt="drifts"
+                src={driftsGif}
+                width="500px"
+                height="250px"
+              ></img>
             </p>
           </section>
           <footer display="grid">
@@ -654,13 +702,9 @@ function PathFinder() {
             <p className="secP">
               Choose an algorithm from the "Algorithms" drop-down menu. You can
               visualize Dijkstra's Algorithm and A star search both with or
-              without diagonal movements options.
-            </p>
-            <p className="secP">
-              You can add multiple sources and destinations but can visualize
-              only with Dijkstra's algorthim.
-              <img src={algo} width="230px" height="130px"></img>
-              <img src={algo2} width="250px" height="130px"></img>
+              without diagonal movements options. Multiple sources and multiple
+              destinations work only with Dijkstra's algorthim.
+              <img alt="algo" src={algo}></img>
             </p>
           </section>
           <footer display="grid">
@@ -695,13 +739,18 @@ function PathFinder() {
           <section>
             <p>Use the navbar buttons to visualize algorithms</p>
             <p className="secP">
-              You can addWalls,addRandomWalls, addDrifts , reset the entire
+              You can addWalls, addRandomWalls, addDrifts , reset the entire
               board, choose diffenent algorithms, all from the navbar. If you
               want to access this description again, click on "Description".
             </p>
             <p className="secP">
               Access the source code{" "}
-              <a href="https://github.com/Deekshan001/Mars-rover">here</a>
+              <a
+                className="link"
+                href="https://github.com/Deekshan001/Mars-rover"
+              >
+                here
+              </a>
             </p>
           </section>
           <footer display="grid">
@@ -731,7 +780,9 @@ function PathFinder() {
       </div>
 
       <Navbar className="nav-bar" variant="dark" expand="lg">
-        <Navbar.Brand>Path Finder</Navbar.Brand>
+        <Navbar.Brand>
+          <img alt="logo" src={logo} width="55px"></img>Curiosity
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
@@ -742,7 +793,7 @@ function PathFinder() {
             <NavDropdown title="Algorithms" id="basic-nav-dropdown">
               <NavDropdown
                 drop="right"
-                classname="Dropdownmenuclass"
+                className="Dropdownmenuclass"
                 title="Dijikstra"
                 id="basic-nav-dropdown"
                 onClick={() => isAstarClicked(false)}
@@ -757,7 +808,7 @@ function PathFinder() {
               </NavDropdown>
               <NavDropdown
                 drop="right"
-                classname="Dropdownmenuclass"
+                className="Dropdownmenuclass"
                 title="A Star"
                 id="basic-nav-dropdown"
                 onClick={() => isAstarClicked(true)}
@@ -765,7 +816,7 @@ function PathFinder() {
                 <NavDropdown.Header variant="dark">OPTIONS</NavDropdown.Header>
                 <NavDropdown
                   drop="right"
-                  classname="Dropdownmenuclass"
+                  className="Dropdownmenuclass"
                   title="With Diagonal Movements"
                   id="basic-nav-dropdown"
                   onClick={() => isDiagMovementClicked(true)}
@@ -789,7 +840,7 @@ function PathFinder() {
                 </NavDropdown>
                 <NavDropdown
                   drop="right"
-                  classname="Dropdownmenuclass"
+                  className="Dropdownmenuclass"
                   title="Without Diagonal Movements"
                   id="basic-nav-dropdown"
                   onClick={() => isDiagMovementClicked(false)}
@@ -818,6 +869,7 @@ function PathFinder() {
         </Navbar.Collapse>
       </Navbar>
 
+      {/*Handle Path not found*/}
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Unreachable!!</Modal.Title>
@@ -836,8 +888,6 @@ function PathFinder() {
                 cell={col}
                 isStart={col.isStart}
                 isFinish={col.isFinish}
-                pathChange={col.pathChange}
-                visChange={col.visChange}
                 onMouseDown={(cell) => OnMouseDown(cell)}
                 onMouseEnter={(cell) => OnMouseEnter(cell)}
                 onMouseUp={(cell) => OnMouseUp(cell)}
