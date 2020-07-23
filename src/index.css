@@ -172,7 +172,7 @@ code {
   width: 675px;
   height: 650px;
   position: fixed;
-  top: 75px;
+  top: 10px;
   align-content: center;
   list-style-type: none;
   background-image: url("./images/space.jpg");
