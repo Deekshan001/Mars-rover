@@ -247,6 +247,7 @@ function main(
       grid[neighbour.row][neighbour.col] = neighbour;
     }
   }
+  path.push(null);
   return { path, nodesVisited };
 }
 var startDate, diff, endDate;
