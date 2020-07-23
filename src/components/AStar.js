@@ -106,20 +106,44 @@ function heuristicEuclidean(node1, node2) {
     Math.pow(node1.row - node2.row, 2) + Math.pow(node1.col - node2.col, 2)
   );
 }
+function nearestEnd(grid, cur, diagnol, heuristic, heuristic2, end) {
+  var ans = null;
+  var min = null,
+    minNode = null;
+  for (let i = 0; i < end.length; i++) {
+    let node = grid[end[i][0]][end[i][1]];
+    if (heuristic) ans = heuristicEuclidean(cur, node);
+    else if (!heuristic && !diagnol) ans = heuristicManhattan(cur, node);
+    else if (!heuristic && diagnol && heuristic2)
+      ans = heuristicChebyshev(cur, node);
+    else if (!heuristic && diagnol && !heuristic2)
+      ans = heuristicOctile(cur, node);
+    if (min === null || ans < min) {
+      min = ans;
+      minNode = node;
+    }
+  }
+  return minNode;
+}
 
 function remove(list, item) {
   var x = list.indexOf(item);
   list.splice(x, 1); //removes item at index x
 }
 
-//a* algorithm
-function AStar(grid, start, end, diagnol, heuristic, heuristic2, allDrifts) {
-  var startDate = new Date();
-  initialize(grid);
-  var openList = [];
-  var path = [];
-  var nodesVisited = [];
-  openList.push(grid[start[0][0]][start[0][1]]);
+function main(
+  grid,
+  start,
+  end,
+  diagnol,
+  heuristic,
+  heuristic2,
+  allDrifts,
+  openList,
+  curEnd
+) {
+  let path = [];
+  let nodesVisited = [];
   while (openList.length > 0) {
     //get index of lowest f(x)
     var LowIndex = 0;
@@ -130,24 +154,21 @@ function AStar(grid, start, end, diagnol, heuristic, heuristic2, allDrifts) {
     }
     var curr = openList[LowIndex];
     //Case 1: if destination is found
-
-    if (curr === grid[end[0][0]][end[0][1]]) {
+    if (curr === grid[curEnd.row][curEnd.col]) {
       curr.isVisited = true;
       grid[curr.row][curr.col] = curr;
       var cur = curr;
-
       while (cur.parent) {
         path.push(cur);
         cur = cur.parent;
       }
       path.push(grid[start[0][0]][start[0][1]]);
-      var endDate = new Date();
-      var diff = Math.abs(startDate - endDate);
-      return { path, nodesVisited, diff }; //retrace path
+
+      return { path, nodesVisited }; //retrace path
     }
-    var neighbours;
 
     //case 2:normal case - remove node from open and mark as close, and process its neighbours
+    var neighbours;
     remove(openList, curr);
     nodesVisited.push(curr);
     curr.closed = true;
@@ -194,21 +215,24 @@ function AStar(grid, start, end, diagnol, heuristic, heuristic2, allDrifts) {
         if (heuristic)
           neighbour.h = heuristicEuclidean(
             neighbour,
-            grid[end[0][0]][end[0][1]]
+            grid[curEnd.row][curEnd.col]
           );
         else if (!heuristic && !diagnol)
           neighbour.h = heuristicManhattan(
             neighbour,
-            grid[end[0][0]][end[0][1]]
+            grid[curEnd.row][curEnd.col]
           );
         //get heuristic value
         else if (!heuristic && diagnol && heuristic2)
           neighbour.h = heuristicChebyshev(
             neighbour,
-            grid[end[0][0]][end[0][1]]
+            grid[curEnd.row][curEnd.col]
           );
         else if (!heuristic && diagnol && !heuristic2)
-          neighbour.h = heuristicOctile(neighbour, grid[end[0][0]][end[0][1]]);
+          neighbour.h = heuristicOctile(
+            neighbour,
+            grid[curEnd.row][curEnd.col]
+          );
         neighbour.isVisited = true;
         openList.push(neighbour);
         nodesVisited.push(neighbour);
@@ -223,9 +247,62 @@ function AStar(grid, start, end, diagnol, heuristic, heuristic2, allDrifts) {
       grid[neighbour.row][neighbour.col] = neighbour;
     }
   }
-  endDate = new Date();
-  diff = Math.abs(startDate - endDate);
-  path.push(null);
+}
+var startDate, diff, endDate;
+//a* algorithm
+function AStar(grid, start, end, diagnol, heuristic, heuristic2, allDrifts) {
+  startDate = new Date();
+  initialize(grid);
+  var openList = [];
+  openList.push(grid[start[0][0]][start[0][1]]);
+  var remEnds = end.length;
+  var curEnd = nearestEnd(
+    grid,
+    grid[start[0][0]][start[0][1]],
+    diagnol,
+    heuristic,
+    heuristic2,
+    end
+  );
+  var path1 = [],
+    nodesVisited1 = [];
+  while (remEnds > 0) {
+    var { path, nodesVisited } = main(
+      grid,
+      start,
+      end,
+      diagnol,
+      heuristic,
+      heuristic2,
+      allDrifts,
+      openList,
+      curEnd,
+      remEnds
+    );
+
+    path1 = path1.concat(path.reverse());
+    nodesVisited1 = nodesVisited1.concat(nodesVisited);
+
+    remEnds--;
+    if (remEnds > 0) {
+      initialize(grid);
+      openList = [];
+      openList.push(curEnd);
+      var newEnds = [];
+      for (let j = 0; j < end.length; j++) {
+        if (end[j][0] !== curEnd.row || end[j][1] !== curEnd.col)
+          newEnds.push(end[j]);
+      }
+      end = newEnds.slice();
+      curEnd.parent = null;
+      grid[curEnd.row][curEnd.col] = curEnd;
+      curEnd = nearestEnd(grid, curEnd, diagnol, heuristic, heuristic2, end);
+    }
+    endDate = new Date();
+    diff = Math.abs(startDate - endDate);
+  }
+  path = path1.slice();
+  nodesVisited = nodesVisited1.slice();
   return { path, nodesVisited, diff }; //ret
 }
 export default AStar;

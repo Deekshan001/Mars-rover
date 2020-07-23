@@ -21,7 +21,7 @@ import logo from "../images/start.jpg";
 
 var source = false;
 var destination = false;
-var walls=false;
+var walls = false;
 var time = 0;
 var pathLen = 0;
 var drifts = [];
@@ -47,6 +47,10 @@ function PathFinder() {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const [show2, setShow2] = useState(false);
+  const handleClose2 = () => setShow2(false);
+  const handleShow2 = () => setShow2(true);
 
   //Initialize Grid
   var ncol = Math.floor(window.screen.availWidth / 25) - 1;
@@ -96,7 +100,6 @@ function PathFinder() {
     var ends = retEnds();
     var temp;
     if (AstarSel) {
-      console.log("1");
       temp = AStar(
         grid,
         start,
@@ -106,7 +109,7 @@ function PathFinder() {
         chebyshevClicked,
         allDrifts
       );
-      path = temp.path.reverse();
+      path = temp.path;
     } else {
       temp = Dijikstra(grid, start, ends, allDrifts, diagClicked);
       path = temp.path;
@@ -158,38 +161,9 @@ function PathFinder() {
     }
   }
 
-  //Problematic!!!
-  function clearpaths() {
-    var newCells = grid.slice();
-    for (let i = 0; i < newCells.length; i++)
-      for (let j = 0; j < newCells[i].length; j++) {
-        newCells[i][j] = {
-          ...newCells[i][j],
-          isVisited: false,
-          distance: Infinity,
-        };
-        if (
-          !newCells[i][j].isStart &&
-          !newCells[i][j].isFinish &&
-          !newCells[i][j].isWall &&
-          !newCells[i][j].isDrift &&
-          document.getElementById(`cell-${i}-${j}`) != null
-        )
-          document.getElementById(`cell-${i}-${j}`).className = "cell";
-        if (
-          !newCells[i][j].isStart &&
-          !newCells[i][j].isFinish &&
-          !newCells[i][j].isWall &&
-          newCells[i][j].isDrift &&
-          document.getElementById(`cell-${i}-${j}`) != null
-        )
-          document.getElementById(`cell-${i}-${j}`).className = "cell drift";
-      }
-    makegrid(newCells);
-  }
   function main() {
-    // clearpaths();
-    visualize();
+    if (visited.length !== 0 || path.length !== 0) handleShow2();
+    else visualize();
   }
   function reset() {
     window.location.reload(false);
@@ -203,7 +177,6 @@ function PathFinder() {
 
   //Random Walls
   function addRandomWalls() {
-    var newCells = grid.slice();
     var row;
     var col;
     var i;
@@ -357,9 +330,7 @@ function PathFinder() {
       allDrifts.push(drifts);
       driftIndex += 1;
       drifts = [];
-    }
-    else if(walls)
-    walls=false;
+    } else if (walls) walls = false;
     makegrid(newCells);
     isMousePressed(false);
   }
@@ -390,12 +361,10 @@ function PathFinder() {
         isDrift: true,
         driftNo: driftIndex,
       };
-    } else if(cell.isWall)
-        {  newCells[cell.row][cell.col] = { ...cell, isWall: false};
-              walls=true;
-        }
-    else{
-
+    } else if (cell.isWall) {
+      newCells[cell.row][cell.col] = { ...cell, isWall: false };
+      walls = true;
+    } else {
       newCells[cell.row][cell.col] = { ...cell, isWall: true };
     }
     makegrid(newCells);
@@ -420,16 +389,12 @@ function PathFinder() {
           isDrift: true,
           driftNo: driftIndex,
         };
-      }
-      else if(walls)
-      {
+      } else if (walls) {
         newCells[cell.row][cell.col] = {
           ...newCells[cell.row][cell.col],
           isWall: false,
         };
-      }
-      else
-      if(!cell.isStart && !cell.isFinish)
+      } else if (!cell.isStart && !cell.isFinish)
         newCells[cell.row][cell.col] = {
           ...newCells[cell.row][cell.col],
           isWall: true,
@@ -894,6 +859,15 @@ function PathFinder() {
         </Modal.Header>
         <Modal.Body>
           Path doesn't exist between the given source and destination
+        </Modal.Body>
+      </Modal>
+
+      <Modal show={show2} onHide={handleClose2}>
+        <Modal.Header closeButton>
+          <Modal.Title>Illegal Search</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Kindly reset the grid before starting search again!!
         </Modal.Body>
       </Modal>
 
