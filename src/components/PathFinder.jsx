@@ -529,6 +529,7 @@ function PathFinder() {
               Clicking the option "Add Random Walls" from NavBar,{" "}
               <strong>results in walls at random positions</strong> of the grid.
               <br />
+              <br />
               <img
                 alt="walls"
                 src={randomWallsGif}
@@ -571,7 +572,7 @@ function PathFinder() {
               Wall obstacles are impenetrable, i.e. paths cannot cross through
               them. Click on option "Add Walls" from NavBar then click and drag
               to add walls on the grid.
-              <br />
+              <br /> <br />
               <img alt="walls" src={wallsgif}></img>
             </p>
           </section>
@@ -685,8 +686,9 @@ function PathFinder() {
             <p className="secP">
               Choose an algorithm from the "Algorithms" drop-down menu. You can
               visualize Dijkstra's Algorithm and A star search both with or
-              without diagonal movements options. Multiple sources and multiple
-              destinations work only with Dijkstra's algorthim.
+              without diagonal movements options. Multiple sources works only
+              with Dijikstra and the first source alone is considered in A Star.
+              <br /> <br />
               <img alt="algo" src={algo}></img>
             </p>
           </section>
