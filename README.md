@@ -19,7 +19,7 @@ Add random walls to make it more fun.
 
 
 Click and see the description if you are lost.
-![](desc.png)
+![](desc.PNG)
 
 Start search and look at the path finder do its job.
 
