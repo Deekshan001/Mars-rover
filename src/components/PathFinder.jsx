@@ -52,6 +52,9 @@ function PathFinder() {
   const handleClose2 = () => setShow2(false);
   const handleShow2 = () => setShow2(true);
 
+  const [show3, setShow3] = useState(false);
+  const handleClose3 = () => setShow3(false);
+  const handleShow3 = () => setShow3(true);
   //Initialize Grid
   var ncol = Math.floor(window.screen.availWidth / 25) - 1;
   var nrow = Math.floor((window.screen.availHeight - 175) / 25) - 1;
@@ -100,6 +103,10 @@ function PathFinder() {
     var ends = retEnds();
     var temp;
     if (AstarSel) {
+      if(start.length>1)
+      { handleShow3();
+        return;}
+
       temp = AStar(
         grid,
         start,
@@ -870,6 +877,15 @@ function PathFinder() {
         </Modal.Header>
         <Modal.Body>
           Kindly reset the grid before starting search again!!
+        </Modal.Body>
+      </Modal>
+
+      <Modal show={show3} onHide={handleClose3}>
+        <Modal.Header closeButton>
+          <Modal.Title>Not Possible!!</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Kindly use the dijikstras algorithm if there are multiple sources!!
         </Modal.Body>
       </Modal>
 
