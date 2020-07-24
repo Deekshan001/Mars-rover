@@ -375,7 +375,7 @@ function PathFinder() {
       const div2 = document.querySelector("#seventhpage");
       div1.style.display = "block";
       div2.style.display = "none";
-    }else if (page === "eighth" && action === "next") {
+    } else if (page === "eighth" && action === "next") {
       const div1 = document.querySelector("#ninthpage");
       const div2 = document.querySelector("#eighthpage");
       div1.style.display = "block";
@@ -385,8 +385,7 @@ function PathFinder() {
       const div2 = document.querySelector("#eighthpage");
       div1.style.display = "block";
       div2.style.display = "none";
-    }
-    else if (page === "ninth" && action === "finish") {
+    } else if (page === "ninth" && action === "finish") {
       const div1 = document.querySelector("#ninthpage");
       div1.style.display = "none";
     } else if (page === "ninth" && action === "previous") {
@@ -813,11 +812,13 @@ function PathFinder() {
         <div className="list2">
           <header align="center">Random Maze</header>
           <section>
-            <p></p>
             <p className="secP">
-
+              Clicking the option "Random Maze" from NavBar,{" "}
+              <strong>results in walls arranged as a maze</strong>. Prim's maze
+              generation algorithm is used here.
+              <br />
+              <img alt="maze" src={maze} width="500px" height="250px"></img>
             </p>
-
           </section>
           <footer display="grid">
             <button
@@ -849,13 +850,13 @@ function PathFinder() {
         <div className="list2">
           <header align="center">Visualizing and more</header>
           <section>
-            <p>Use the navbar buttons to visualize algorithms</p>
+            <p> Use the navbar buttons to visualize algorithms and have fun!</p>
             <p className="secP">
-              You can addWalls, addRandomWalls, addDrifts , reset the entire
-              board, choose diffenent algorithms, all from the navbar. If you
-              want to access this description again, click on "Description".
-            </p>
-            <p className="secP">
+              You can add Walls, Random Walls, Drifts , Random Mazes, Sources,
+              Destinations, reset the entire board, choose diffenent algorithms,
+              all from the navbar. If you want to access this description again,
+              click on "Description".
+              <br /> <br />
               Access the source code{" "}
               <a
                 className="link"
