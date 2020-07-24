@@ -18,6 +18,7 @@ import randomWallsGif from "./images/randomwalls.gif";
 import srcDestGif from "./images/src-dest.gif";
 import driftsGif from "./images/drifts.gif";
 import logo from "../images/start.jpg";
+import maze from "./images/mazes.gif";
 
 var source = false;
 var destination = false;
@@ -103,9 +104,10 @@ function PathFinder() {
     var ends = retEnds();
     var temp;
     if (AstarSel) {
-      if(start.length>1)
-      { handleShow3();
-        return;}
+      if (start.length > 1) {
+        handleShow3();
+        return;
+      }
 
       temp = AStar(
         grid,
@@ -200,6 +202,77 @@ function PathFinder() {
         grid[row][col].isWall = true;
       }
     }
+  }
+
+  //Maze
+  function PrimsMaze() {
+    var start = retSources();
+    for (let i = 0; i < nrow; i++)
+      for (let j = 0; j < ncol; j++) {
+        if (
+          !grid[i][j].isStart &&
+          !grid[i][j].isFinish &&
+          !grid[i][j].isDrift
+        ) {
+          grid[i][j].isWall = true;
+          grid[i][j].isVisited = false;
+        }
+      }
+
+    var wallList = [];
+    var cur = grid[start[0][0]][start[0][1]];
+    cur.isVisited = true;
+    let dx = [-2, 2, 0, 0],
+      dy = [0, 0, -2, 2];
+    for (let k = 0; k < 4; k++) {
+      let x = cur.row + dx[k];
+      let y = cur.col + dy[k];
+      if (x < nrow && y < ncol && x >= 0 && y >= 0) {
+        wallList.push(grid[x][y]);
+        grid[x][y].isVisited = true;
+      }
+    }
+    while (wallList.length > 0) {
+      cur = wallList[Math.floor(Math.random() * wallList.length)];
+      var fronts = [];
+      for (let k = 0; k < 4; k++) {
+        let x = cur.row + dx[k];
+        let y = cur.col + dy[k];
+        if (x < nrow && y < ncol && x >= 0 && y >= 0 && !grid[x][y].isWall)
+          fronts.push(grid[x][y]);
+      }
+      if (fronts.length > 0) {
+        let neighbour = fronts[Math.floor(Math.random() * fronts.length)];
+        let x = Math.floor((cur.row + neighbour.row) / 2);
+        let y = Math.floor((cur.col + neighbour.col) / 2);
+        if (x < nrow && y < ncol && x >= 0 && y >= 0) {
+          grid[x][y].isWall = false;
+          grid[neighbour.row][neighbour.col].isWall = false;
+          cur.isWall = false;
+          grid[cur.row][cur.col] = cur;
+        }
+      }
+      let ind = wallList.indexOf(cur);
+      wallList.splice(ind, 1);
+      for (let k = 0; k < 4; k++) {
+        let x = cur.row + dx[k];
+        let y = cur.col + dy[k];
+        if (
+          x < nrow &&
+          y < ncol &&
+          x >= 0 &&
+          y >= 0 &&
+          grid[x][y].isWall &&
+          !grid[x][y].isVisited
+        ) {
+          wallList.push(grid[x][y]);
+          grid[x][y].isVisited = true;
+        }
+      }
+      for (let i = 0; i < nrow; i++)
+        for (let j = 0; j < ncol; j++) grid[i][j].isVisited = false;
+    }
+    makegrid(grid);
   }
 
   //Handle each of the additions [Walls, Sources, Destinations, Drifts]
@@ -852,6 +925,7 @@ function PathFinder() {
             <Nav.Link onClick={popup}>Description</Nav.Link>
           </Nav>
           <Nav>
+            <Nav.Link onClick={PrimsMaze}>Random Maze</Nav.Link>
             <Nav.Link onClick={addRandomWalls}>Add Random Walls</Nav.Link>
             <Nav.Link onClick={reset}>Reset Grid</Nav.Link>
             <Button onClick={main} variant="outline-success">

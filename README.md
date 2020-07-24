@@ -14,9 +14,9 @@ Drifts are imagined to be air columns. Once you enter a drift node you will be p
 
 ![](src/components/images/drifts.gif)
 
-Add random walls to make it more fun.
+Add random walls or mazes to make it more fun.
 ![](src/components/images/randomwalls.gif)
-
+![](src/components/images/mazes.gif)
 
 Click and see the description if you are lost.
 ![](desc.PNG)
