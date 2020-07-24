@@ -243,6 +243,9 @@ code {
 #eighthpage {
   display: none;
 }
+#ninthpage {
+  display: none;
+}
 
 #secondpage .list2 section ul {
   display: grid;

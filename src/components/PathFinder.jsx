@@ -375,12 +375,23 @@ function PathFinder() {
       const div2 = document.querySelector("#seventhpage");
       div1.style.display = "block";
       div2.style.display = "none";
-    } else if (page === "eighth" && action === "finish") {
-      const div1 = document.querySelector("#eighthpage");
-      div1.style.display = "none";
+    }else if (page === "eighth" && action === "next") {
+      const div1 = document.querySelector("#ninthpage");
+      const div2 = document.querySelector("#eighthpage");
+      div1.style.display = "block";
+      div2.style.display = "none";
     } else if (page === "eighth" && action === "previous") {
       const div1 = document.querySelector("#seventhpage");
       const div2 = document.querySelector("#eighthpage");
+      div1.style.display = "block";
+      div2.style.display = "none";
+    }
+    else if (page === "ninth" && action === "finish") {
+      const div1 = document.querySelector("#ninthpage");
+      div1.style.display = "none";
+    } else if (page === "ninth" && action === "previous") {
+      const div1 = document.querySelector("#eighthpage");
+      const div2 = document.querySelector("#ninthpage");
       div1.style.display = "block";
       div2.style.display = "none";
     }
@@ -800,6 +811,42 @@ function PathFinder() {
 
       <div className="contain2" id="eighthpage">
         <div className="list2">
+          <header align="center">Random Maze</header>
+          <section>
+            <p></p>
+            <p className="secP">
+
+            </p>
+
+          </section>
+          <footer display="grid">
+            <button
+              className="btn btn-outline-light"
+              type="button"
+              onClick={() => actioPerformed("eighthpage", "skip")}
+            >
+              Skip Description
+            </button>
+            <button
+              className="btn btn-outline-light"
+              type="button"
+              onClick={() => actioPerformed("eighth", "previous")}
+            >
+              Previous
+            </button>
+            <button
+              className="btn btn-outline-light"
+              type="button"
+              onClick={() => actioPerformed("eighth", "next")}
+            >
+              Next
+            </button>
+          </footer>
+        </div>
+      </div>
+
+      <div className="contain2" id="ninthpage">
+        <div className="list2">
           <header align="center">Visualizing and more</header>
           <section>
             <p>Use the navbar buttons to visualize algorithms</p>
@@ -822,21 +869,21 @@ function PathFinder() {
             <button
               className="btn btn-outline-light"
               type="button"
-              onClick={() => actioPerformed("eighthpage", "skip")}
+              onClick={() => actioPerformed("ninthpage", "skip")}
             >
               Skip Description
             </button>
             <button
               className="btn btn-outline-light"
               type="button"
-              onClick={() => actioPerformed("eighth", "previous")}
+              onClick={() => actioPerformed("ninth", "previous")}
             >
               Previous
             </button>
             <button
               className="btn btn-outline-light"
               type="button"
-              onClick={() => actioPerformed("eighth", "finish")}
+              onClick={() => actioPerformed("ninth", "finish")}
             >
               Finish
             </button>
