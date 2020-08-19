@@ -1,5 +1,6 @@
 # Path Finding
-This is a path finding visualizer to help the mars rover(s) navigate, and find shortest path to the destination(s).
+This is a [path finding visualizer](https://curiosity-rover.herokuapp.com/) to help the mars rover(s) navigate, and find shortest path to the destination(s). 
+
 
 # Algorithms used
 Dijikstra's Algorithm : Guarantees the shortest path
